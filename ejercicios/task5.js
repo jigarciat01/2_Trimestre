@@ -1,6 +1,7 @@
 const palabras = document.querySelectorAll(".palabra");
 const zonasDeSoltar = document.querySelectorAll(".dropzone");
 const btnValidar = document.getElementById("btn-validar");
+const mensajeDiv = document.getElementById("resultado");;
 
 
 palabras.forEach((palabra) => {
@@ -56,7 +57,6 @@ function validar() {
     }
   });
 
-  const mensajeDiv = document.getElementById("resultado");
   if (aciertos === 6) {
     mensajeDiv.style.color = "green";
     mensajeDiv.innerText =
