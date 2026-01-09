@@ -15,8 +15,6 @@ zonasDeSoltar.forEach((zona) => {
 
 btnValidar.addEventListener("click", validar);
 
-// --- 3. FUNCIONES LÓGICAS ---
-
 function allowDrop(ev) {
   ev.preventDefault();
 }
