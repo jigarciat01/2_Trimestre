@@ -1,22 +1,17 @@
-// --- 1. REFERENCIAS A ELEMENTOS ---
 const palabras = document.querySelectorAll(".palabra");
-const zonasDeSoltar = document.querySelectorAll(".dropzone"); // Categorías + Origen
+const zonasDeSoltar = document.querySelectorAll(".dropzone");
 const btnValidar = document.getElementById("btn-validar");
 
-// --- 2. ASIGNACIÓN DE EVENTOS (LISTENERS) ---
 
-// A) Eventos para las palabras arrastrables
 palabras.forEach((palabra) => {
   palabra.addEventListener("dragstart", drag);
 });
 
-// B) Eventos para las zonas donde se suelta (Categorías y Origen)
 zonasDeSoltar.forEach((zona) => {
   zona.addEventListener("dragover", allowDrop);
   zona.addEventListener("drop", drop);
 });
 
-// C) Evento para el botón
 btnValidar.addEventListener("click", validar);
 
 // --- 3. FUNCIONES LÓGICAS ---
@@ -34,10 +29,8 @@ function drop(ev) {
   const data = ev.dataTransfer.getData("text");
   const draggedElement = document.getElementById(data);
 
-  // currentTarget es el div donde soltamos (la zona)
   ev.currentTarget.appendChild(draggedElement);
 
-  // Limpiamos colores si el usuario mueve la ficha
   draggedElement.classList.remove("correcto", "incorrecto");
 }
 
@@ -50,7 +43,6 @@ function validar() {
     const padreId = elemento.parentElement.id;
     const categoriaCorrecta = elemento.getAttribute("data-categoria");
 
-    // Si está en el origen, no cuenta ni bien ni mal (o puedes contarlo como error si quieres)
     if (padreId === "origen") return;
 
     if (padreId === categoriaCorrecta) {

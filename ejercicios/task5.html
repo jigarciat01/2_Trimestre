@@ -6,7 +6,6 @@
   <script src="task5.js" defer></script>
   
   <style>
-    /* (He dejado el CSS aquí por comodidad, pero también podrías sacarlo a un style.css) */
     body { font-family: sans-serif; text-align: center; background-color: #f4f4f9; display: flex; flex-direction: column; align-items: center; padding: 20px; }
     .categorias-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
     .categoria { width: 200px; min-height: 250px; border: 3px dashed #aaa; background-color: #e9ecef; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; align-items: center; }
@@ -24,25 +23,25 @@
   <h1>Arrastra las Palabras a sus Categorías</h1>
 
   <div class="categorias-container">
-    <div id="frutas" class="categoria dropzone">
-      <h3>Frutas</h3>
+    <div id="madrid" class="categoria dropzone">
+      <h3>Real Madrid</h3>
     </div>
-    <div id="animales" class="categoria dropzone">
-      <h3>Animales</h3>
+    <div id="barca" class="categoria dropzone">
+      <h3>Barcelona</h3>
     </div>
-    <div id="colores" class="categoria dropzone">
-      <h3>Colores</h3>
+    <div id="atletico" class="categoria dropzone">
+      <h3>Atletico de Madrid</h3>
     </div>
   </div>
 
   <h3>Palabras para clasificar:</h3>
   <div id="origen" class="dropzone">
-    <div id="p1" class="palabra" draggable="true" data-categoria="animales">Perro</div>
-    <div id="p2" class="palabra" draggable="true" data-categoria="frutas">Manzana</div>
-    <div id="p3" class="palabra" draggable="true" data-categoria="colores">Rojo</div>
-    <div id="p4" class="palabra" draggable="true" data-categoria="frutas">Plátano</div>
-    <div id="p5" class="palabra" draggable="true" data-categoria="colores">Azul</div>
-    <div id="p6" class="palabra" draggable="true" data-categoria="animales">Gato</div>
+    <div id="p1" class="palabra" draggable="true" data-categoria="madrid">Vinicius</div>
+    <div id="p2" class="palabra" draggable="true" data-categoria="atletico">Julian Álvarez</div>
+    <div id="p3" class="palabra" draggable="true" data-categoria="barca">Lamine Yamal</div>
+    <div id="p4" class="palabra" draggable="true" data-categoria="madrid">Mbappe</div>
+    <div id="p5" class="palabra" draggable="true" data-categoria="barca">Pedri</div>
+    <div id="p6" class="palabra" draggable="true" data-categoria="atletico">Sorloth</div>
   </div>
 
   <button id="btn-validar">Validar Respuesta</button>
