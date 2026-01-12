@@ -2,6 +2,7 @@ export const products = [
     { 
         id: 1, 
         name: "Monitor 24\"", 
+        price: 150,
         image: "img/monitor.jpg" 
     },
     { 

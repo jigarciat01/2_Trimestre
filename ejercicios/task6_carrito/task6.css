@@ -112,3 +112,18 @@ input[type="number"] {
     .container { flex-direction: column; }
     .cart-section { order: -1; } /* Pone el carrito arriba en móvil si se desea, o quitar para dejar abajo */
 }
+
+/* En task6.css */
+
+.product-img {
+    width: 100%;           /* Ancho completo de la tarjeta */
+    height: 150px;         /* Altura fija */
+    object-fit: cover;     /* Recorte inteligente para no deformar */
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+/* Para evitar que el contenido se salga si la imagen es muy grande */
+.product-card {
+    overflow: hidden; 
+}
