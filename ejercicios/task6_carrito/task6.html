@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito</title>
+    <link rel="stylesheet" href="task6.css">
+    <script type="module" src="task6.js"></script>
+</head>
+<body>
+    <header><h1>Tienda Modular</h1></header>
+
+    <div class="container">
+        <main class="products-section">
+            <h2>Productos Disponibles</h2>
+            <div id="product-list" class="product-grid"></div>
+        </main>
+
+        <aside class="cart-section">
+            <h2>Tu Carrito</h2>
+            <div class="cart-container">
+                <table id="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th><th>Precio</th><th>Cant.</th><th>Subtotal</th><th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-body"></tbody>
+                </table>
+            </div>
+            <div class="cart-summary"><h3 id="cart-total">Total: $0.00</h3></div>
+            <div class="cart-controls">
+                <button id="btn-clear" onclick="app.clearAll()">Vaciar Carrito</button>
+                <button id="btn-checkout" onclick="app.checkout()">Finalizar Compra</button>
+            </div>
+        </aside>
+    </div>
+</body>
+</html>
