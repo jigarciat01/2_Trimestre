@@ -2,105 +2,185 @@ import { products } from './task6data.js';
 import { loadCartFromCookie } from './task6storage.js';
 import * as CartLogic from './task6cart.js';
 
-// --- SECCIÓN 1: FUNCIONES DE VISUALIZACIÓN (UI) ---
+// Estado de usuario (simulado)
+let isLoggedIn = false;
 
-// Renderiza la lista de productos en el HTML
-function renderProducts() {
+// --- FUNCIONES LÓGICAS DE UI ---
+
+// Función de filtrado solicitada
+function filterProducts(query) {
+    if (!query) return products;
+    const lowerQuery = query.toLowerCase();
+    
+    // Filtramos por nombre o por categoría
+    return products.filter(p => 
+        p.name.toLowerCase().includes(lowerQuery) || 
+        p.category.toLowerCase().includes(lowerQuery)
+    );
+}
+
+// Renderizar Productos (ahora acepta una lista opcional)
+function renderProducts(list = products) {
     const container = document.getElementById('product-list');
-    container.innerHTML = products.map(p => `
+    
+    if (list.length === 0) {
+        container.innerHTML = '<p>No se encontraron productos.</p>';
+        return;
+    }
+
+    container.innerHTML = list.map(p => `
         <div class="product-card">
             <img src="${p.image}" alt="${p.name}" class="product-img">
-            
             <h3>${p.name}</h3>
             <span class="price">$${p.price}</span>
-            <button class="btn-add" onclick="app.add(${p.id})">Añadir al Carrito</button>
+            <button class="btn-add" onclick="app.add(${p.id})">Añadir</button>
         </div>
     `).join('');
 }
 
-// Renderiza la tabla del carrito en el HTML
+// Renderizar Carrito (Con lógica de descuentos)
 function renderCart() {
-    const cart = CartLogic.getCart(); // Obtenemos el estado actual
-    const tbody = document.getElementById('cart-body');
-    const totalElement = document.getElementById('cart-total');
-    let total = 0;
+    const cart = CartLogic.getCart();
+    const discountPercent = CartLogic.getDiscount(); // 0.10, 0.20, etc.
 
+    const tbody = document.getElementById('cart-body');
+    const subtotalEl = document.getElementById('subtotal');
+    const discountEl = document.getElementById('discount-display');
+    const totalEl = document.getElementById('cart-total');
+    
+    let subtotal = 0;
+
+    // Generar tabla
     if (cart.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#777;">Carrito vacío.</td></tr>';
-        totalElement.innerText = 'Total: $0.00';
-        return;
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">Vacío</td></tr>';
+    } else {
+        tbody.innerHTML = cart.map(item => {
+            const rowTotal = item.price * item.quantity;
+            subtotal += rowTotal;
+            return `
+                <tr>
+                    <td>${item.name}</td>
+                    <td>$${item.price}</td>
+                    <td><input type="number" value="${item.quantity}" min="1" onchange="app.updateQty(${item.id}, this.value)"></td>
+                    <td>$${rowTotal}</td>
+                    <td><button class="btn-remove" onclick="app.remove(${item.id})">X</button></td>
+                </tr>
+            `;
+        }).join('');
     }
 
-    tbody.innerHTML = cart.map(item => {
-        const subtotal = item.price * item.quantity;
-        total += subtotal;
-        return `
-            <tr>
-                <td>${item.name}</td>
-                <td>$${item.price}</td>
-                <td>
-                    <input type="number" value="${item.quantity}" min="1" 
-                           onchange="app.updateQty(${item.id}, this.value)">
-                </td>
-                <td>$${subtotal.toFixed(2)}</td>
-                <td>
-                    <button class="btn-remove" onclick="app.remove(${item.id})">Borrar</button>
-                </td>
-            </tr>
-        `;
-    }).join('');
+    // Cálculos finales
+    const discountAmount = subtotal * discountPercent;
+    const finalTotal = subtotal - discountAmount;
 
-    totalElement.innerText = `Total: $${total.toFixed(2)}`;
+    // Actualizar Textos
+    subtotalEl.innerText = `Subtotal: $${subtotal.toFixed(2)}`;
+    
+    if (discountPercent > 0) {
+        discountEl.style.display = 'block';
+        discountEl.innerText = `Descuento (${discountPercent*100}%): -$${discountAmount.toFixed(2)}`;
+    } else {
+        discountEl.style.display = 'none';
+    }
+
+    totalEl.innerText = `Total: $${finalTotal.toFixed(2)}`;
+    
+    // Control del botón comprar según login
+    updateCheckoutButton();
 }
 
-// --- SECCIÓN 2: INICIALIZACIÓN Y CONTROL ---
+function updateCheckoutButton() {
+    const btn = document.getElementById('btn-checkout');
+    if (isLoggedIn) {
+        btn.disabled = false;
+        btn.innerText = "Finalizar Compra";
+        btn.style.opacity = "1";
+        btn.style.cursor = "pointer";
+    } else {
+        btn.disabled = true;
+        btn.innerText = "Inicia sesión para comprar";
+        btn.style.opacity = "0.6";
+        btn.style.cursor = "not-allowed";
+    }
+}
 
-// Al cargar la página
+// --- INICIALIZACIÓN ---
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Pintar productos
-    renderProducts();
-
-    // 2. Recuperar carrito de cookies
+    renderProducts(products); // Render inicial con todos
     const storedCart = loadCartFromCookie();
     CartLogic.setCart(storedCart);
-
-    // 3. Pintar carrito inicial
     renderCart();
 });
 
-// --- SECCIÓN 3: EXPOSICIÓN GLOBAL (window.app) ---
-// Necesario para que el HTML (onclick) vea las funciones
+// --- EXPOSICIÓN GLOBAL (window.app) ---
 window.app = {
+    // ... Las funciones anteriores (add, remove, updateQty, clearAll) ...
     
     add: (id) => {
         const product = products.find(p => p.id === id);
         CartLogic.addItem(product);
-        renderCart(); // Actualizamos la vista
+        renderCart();
     },
 
     remove: (id) => {
-        if(confirm("¿Eliminar producto?")) {
-            CartLogic.removeItem(id);
-            renderCart(); // Actualizamos la vista
-        }
+        CartLogic.removeItem(id);
+        renderCart();
     },
 
-    updateQty: (id, value) => {
-        const qty = parseInt(value);
-        if (qty < 1) {
-            alert("Cantidad mínima: 1");
-            renderCart(); // Revertir visualmente el input
-            return;
-        }
-        CartLogic.updateItemQty(id, qty);
-        renderCart(); // Actualizamos la vista
+    updateQty: (id, val) => {
+        if(val < 1) return renderCart();
+        CartLogic.updateItemQty(id, parseInt(val));
+        renderCart();
     },
 
     clearAll: () => {
-        if(confirm("¿Vaciar carrito?")) {
-            CartLogic.clearCart();
-            renderCart();
+        CartLogic.clearCart();
+        renderCart();
+    },
+
+    // --- NUEVAS FUNCIONES ---
+
+    // 1. Lógica de Búsqueda
+    search: (query) => {
+        const filteredList = filterProducts(query);
+        renderProducts(filteredList);
+    },
+
+    // 2. Lógica de Cupón
+    applyCoupon: () => {
+        const codeInput = document.getElementById('coupon-code');
+        const code = codeInput.value.toUpperCase();
+        const result = CartLogic.applyCouponLogic(code);
+        
+        if (result.success) {
+            alert(`¡Cupón aplicado! Descuento del ${result.percent}%`);
+        } else {
+            alert("Cupón no válido");
         }
+        renderCart(); // Re-calcular totales
+    },
+
+    // 3. Lógica de Login Simulado
+    login: () => {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+
+        if (user === 'admin' && pass === '1234') {
+            isLoggedIn = true;
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('user-info').style.display = 'block';
+            document.getElementById('user-name-display').innerText = user;
+            updateCheckoutButton();
+        } else {
+            alert("Usuario o contraseña incorrectos.");
+        }
+    },
+
+    logout: () => {
+        isLoggedIn = false;
+        document.getElementById('login-form').style.display = 'block';
+        document.getElementById('user-info').style.display = 'none';
+        updateCheckoutButton();
     },
 
     checkout: () => {
@@ -109,7 +189,7 @@ window.app = {
             alert("Carrito vacío.");
             return;
         }
-        alert("¡Compra realizada!");
+        alert("¡Compra procesada con éxito!");
         CartLogic.clearCart();
         renderCart();
     }

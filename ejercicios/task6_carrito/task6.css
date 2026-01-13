@@ -127,3 +127,53 @@ input[type="number"] {
 .product-card {
     overflow: hidden; 
 }
+
+/* --- Estilos Nuevos --- */
+
+/* Barra Login */
+#login-bar {
+    background: #34495e;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: white;
+}
+
+#login-bar input {
+    padding: 5px;
+    border-radius: 4px;
+    border: none;
+    margin-right: 5px;
+}
+
+/* Barra Búsqueda */
+.header-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#search-input {
+    padding: 10px;
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 1rem;
+}
+
+/* Cupón */
+.coupon-section {
+    margin: 15px 0;
+    display: flex;
+    gap: 5px;
+}
+.coupon-section input {
+    flex: 1;
+    padding: 8px;
+    width: auto; /* Sobreescribe el width 40px global de inputs number si aplica */
+}
