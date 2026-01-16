@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda Completa</title>
+    <title>Eclipse Gaming</title>
     <link rel="stylesheet" href="task6.css">
     <script type="module" src="task6.js"></script>
 </head>
@@ -12,21 +12,25 @@
         <div id="login-form">
             <input type="text" id="username" placeholder="Usuario">
             <input type="password" id="password" placeholder="Pass">
-            <button onclick="app.login()">Entrar</button>
+            <input type="button" id="btn-login" value="Entrar">
         </div>
         <div id="user-info" style="display: none;">
             <span>Hola, <b id="user-name-display">Usuario</b></span>
-            <button onclick="app.logout()" style="background:#e74c3c;">Salir</button>
+            <input type="button" id="btn-logout" value="Salir" style="background:#e74c3c;">
         </div>
     </div>
 
-    <header><h1>Tienda Modular</h1></header>
+    <header><h1>Eclipse Gaming</h1></header>
 
     <div class="container">
         <main class="products-section">
             <div class="header-controls">
                 <h2>Productos Disponibles</h2>
-                <input type="text" id="search-input" placeholder="Buscar producto" onkeyup="app.search(this.value)">
+                
+                <div class="search-wrapper">
+                    <input type="text" id="search-input" placeholder="Buscar producto" autocomplete="off">
+                    <ul id="suggestions-list" class="suggestions-list"></ul>
+                </div>
             </div>
             
             <div id="product-list" class="product-grid"></div>
@@ -47,7 +51,7 @@
             
             <div class="coupon-section">
                 <input type="text" id="coupon-code" placeholder="Código">
-                <button onclick="app.applyCoupon()">Aplicar</button>
+                <input type="button" id="btn-apply-coupon" value="Aplicar">
             </div>
 
             <div class="cart-summary">
@@ -57,8 +61,8 @@
             </div>
             
             <div class="cart-controls">
-                <button id="btn-clear" onclick="app.clearAll()">Vaciar</button>
-                <button id="btn-checkout" onclick="app.checkout()" disabled title="Inicia sesión para comprar">Comprar (Login req.)</button>
+                <input type="button" id="btn-clear" value="Vaciar">
+                <input type="button" id="btn-checkout" value="Comprar (Login req.)" disabled title="Inicia sesión para comprar">
             </div>
         </aside>
     </div>
