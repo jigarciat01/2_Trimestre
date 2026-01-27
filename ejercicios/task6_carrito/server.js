@@ -1,12 +1,19 @@
 // server.js
 const express = require("express");
 const cors = require("cors");
+const path = require("path"); // 1. Añade esta línea
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 2. AÑADE ESTA LÍNEA para servir archivos estáticos (CSS, JS, Imágenes)
 app.use(express.static(__dirname));
+
+// 3. AÑADE ESTA RUTA para que al entrar a http://localhost:3000 cargue tu HTML
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'task6.html'));
+});
 
 // --- DATOS EN MEMORIA ---
 
@@ -27,7 +34,7 @@ const coupons = [
 // Al reiniciar el servidor (node server.js), el stock vuelve a estos valores.
 let products = [
     { id: 1, name: "Monitor 24\" Oficina", price: 150, category: "monitor", image: "img/monitor.jpg", stock: 5 },
-    { id: 101, name: "Monitor 27\" Gaming 144Hz", price: 300, category: "monitor", image: "img/monitor.jpg", stock: 2 }, 
+    { id: 101, name: "Monitor 27\" Gaming 144Hz", price: 300, category: "monitor", image: "img/monitor.jpg", stock: 2 },
     { id: 102, name: "Monitor Curvo 32\"", price: 450, category: "monitor", image: "img/monitor.jpg", stock: 0 },
     { id: 2, name: "Teclado Mecánico RGB", price: 80, category: "teclado", image: "img/teclado.jpg", stock: 10 },
     { id: 201, name: "Teclado Inalámbrico Slim", price: 40, category: "teclado", image: "img/teclado.jpg", stock: 0 },
@@ -52,7 +59,7 @@ app.get("/products", (req, res) => {
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
     const user = users.find(u => u.username === username && u.password === password);
-    
+
     if (user) {
         res.json({ ok: true, user: user.username });
     } else {
@@ -74,7 +81,7 @@ app.get("/coupon/:code", (req, res) => {
 
 // 4. Procesar compra y ACTUALIZAR STOCK
 app.post("/checkout", (req, res) => {
-    const { cart } = req.body; 
+    const { cart } = req.body;
 
     if (!cart || !Array.isArray(cart)) {
         return res.status(400).json({ ok: false, message: "Carrito inválido" });
