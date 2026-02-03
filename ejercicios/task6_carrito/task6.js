@@ -1,12 +1,34 @@
-// --- task6.js (COMPLETO) ---
+// --- task6.js (CON BARRA DE NOTIFICACIONES SUPERIOR) ---
 
-import { products } from './task6data.js';
-import { loadCartFromCookie, saveStockToStorage, loadStockFromStorage } from './task6storage.js';
+import { loadCartFromCookie } from './task6storage.js';
 import * as CartLogic from './task6cart.js';
 
 let isLoggedIn = false;
+let products = []; // Se llena desde el servidor
 
-// --- FUNCIONES LÓGICAS ---
+// --- NUEVA FUNCIÓN: MENSAJE SUPERIOR (Sin Librerías) ---
+function showMessage(msg, type = 'success') {
+    const bar = document.getElementById('notification-bar');
+    
+    // 1. Poner texto y resetear clases
+    bar.innerText = msg;
+    bar.className = ''; // Limpiar clases anteriores (success/error/show)
+    
+    // 2. Añadir clase de color y clase 'show' para bajar la barra
+    bar.classList.add(type === 'success' ? 'success' : 'error');
+    
+    // Pequeño retardo para permitir que el navegador procese el cambio de clase base
+    requestAnimationFrame(() => {
+        bar.classList.add('show');
+    });
+
+    // 3. Ocultar automáticamente después de 3 segundos
+    setTimeout(() => {
+        bar.classList.remove('show');
+    }, 3000);
+}
+
+// --- FUNCIONES DE RENDERIZADO ---
 
 function filterProducts(query) {
     if (!query) return products;
@@ -20,8 +42,8 @@ function filterProducts(query) {
 function renderProducts(list = products) {
     const container = document.getElementById('product-list');
     
-    if (list.length === 0) {
-        container.innerHTML = '<p style="text-align:center; width:100%; padding:20px;">No se encontraron productos.</p>';
+    if (!list || list.length === 0) {
+        container.innerHTML = '<p style="text-align:center; width:100%; padding:20px;">Cargando productos...</p>';
         return;
     }
 
@@ -55,7 +77,6 @@ function renderCart() {
     const totalEl = document.getElementById('cart-total');
     let subtotal = 0;
 
-    // --- Lógica de renderizado de filas ---
     if (cart.length === 0) {
         tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px; color: #888;">Tu carrito está vacío</td></tr>';
         subtotalEl.innerText = "Subtotal: $0.00";
@@ -64,9 +85,7 @@ function renderCart() {
     } else {
         tbody.innerHTML = cart.map(item => {
             const originalProduct = products.find(p => p.id === item.id);
-            if (!originalProduct) return ''; 
-
-            const maxStock = originalProduct.stock;
+            const maxStock = originalProduct ? originalProduct.stock : item.quantity;
             const rowTotal = item.price * item.quantity;
             subtotal += rowTotal;
 
@@ -87,7 +106,6 @@ function renderCart() {
         }).join('');
     }
 
-    // --- Cálculos finales ---
     const discountAmount = subtotal * discountPercent;
     const finalTotal = subtotal - discountAmount;
 
@@ -102,12 +120,10 @@ function renderCart() {
     
     totalEl.innerText = `Total: $${finalTotal.toFixed(2)}`;
     
-    // --- ACTUALIZAR BOTÓN FLOTANTE (FAB) ---
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     const fabCount = document.getElementById('fab-count');
     if(fabCount) {
         fabCount.innerText = totalItems;
-        // Opcional: Ocultar badge si es 0, o dejarlo
         fabCount.style.display = totalItems > 0 ? 'flex' : 'none';
     }
 
@@ -155,20 +171,48 @@ function showSuggestions(matches) {
     suggestionsList.style.display = 'block';
 }
 
-// --- HANDLERS ---
+// --- LOGICA DE CONEXIÓN CON SERVIDOR (HANDLERS) ---
 
-function handleLogin() {
+async function loadProducts() {
+    try {
+        const response = await fetch('http://localhost:3000/products');
+        products = await response.json();
+        renderProducts(products);
+        renderCart(); 
+    } catch (error) {
+        console.error("Error cargando productos:", error);
+        // Aquí mostramos el error en la barra roja
+        document.getElementById('product-list').innerHTML = '<p style="color:red; text-align:center;">Error: No se puede conectar con el servidor.</p>';
+        showMessage("No se puede conectar con el servidor", 'error');
+    }
+}
+
+async function handleLogin() {
     const user = document.getElementById('username').value;
     const pass = document.getElementById('password').value;
     
-    if (user === 'admin' && pass === '1234') {
-        isLoggedIn = true;
-        document.getElementById('login-form').style.display = 'none';
-        document.getElementById('user-info').style.display = 'flex';
-        document.getElementById('user-name-display').innerText = user;
-        updateCheckoutButton();
-    } else {
-        alert("Usuario o contraseña incorrectos.\nPrueba: admin / 1234");
+    try {
+        const response = await fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: user, password: pass })
+        });
+        const data = await response.json();
+
+        if (data.ok) {
+            isLoggedIn = true;
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('user-info').style.display = 'flex';
+            document.getElementById('user-name-display').innerText = data.user;
+            updateCheckoutButton();
+            // USAMOS showMessage EN LUGAR DE ALERT
+            showMessage(`¡Hola ${data.user}! Has entrado correctamente.`, 'success');
+        } else {
+            showMessage(data.message, 'error');
+        }
+    } catch (error) {
+        console.error("Error en login:", error);
+        showMessage("Error de conexión con el servidor", 'error');
     }
 }
 
@@ -179,6 +223,7 @@ function handleLogout() {
     document.getElementById('username').value = '';
     document.getElementById('password').value = '';
     updateCheckoutButton();
+    showMessage("Sesión cerrada correctamente", 'success');
 }
 
 function handleAdd(id) {
@@ -188,115 +233,125 @@ function handleAdd(id) {
     const success = CartLogic.addItem(product);
     if (success) {
         renderCart();
+        showMessage("Producto añadido al carrito", 'success');
     } else {
-        alert(`¡Stock insuficiente! No quedan más unidades de "${product.name}".`);
+        showMessage(`¡Stock insuficiente! Solo quedan ${product.stock} unidades.`, 'error');
     }
 }
 
 function handleRemove(id) {
+    // Usamos confirm porque es una acción destructiva, pero mostramos mensaje al final
     if(confirm('¿Eliminar producto del carrito?')) {
         CartLogic.removeItem(id);
         renderCart();
+        showMessage("Producto eliminado", 'success');
     }
 }
 
 function handleUpdateQty(id, val, maxStock) {
     if(val === '') return;
-
     let quantity = parseInt(val);
     const max = parseInt(maxStock);
-
     if (quantity < 1) quantity = 1;
     
     const success = CartLogic.updateItemQty(id, quantity, max);
-    
     if (!success) {
-        alert(`Lo sentimos, solo disponemos de ${max} unidades en stock.`);
+        showMessage(`Lo sentimos, solo disponemos de ${max} unidades.`, 'error');
         renderCart(); 
     } else {
         renderCart();
     }
 }
 
-function handleApplyCoupon() {
+async function handleApplyCoupon() {
     const codeInput = document.getElementById('coupon-code');
-    const code = codeInput.value.trim().toUpperCase();
-    
+    const code = codeInput.value.trim();
     if(!code) return;
 
-    const result = CartLogic.applyCouponLogic(code);
-    if (result.success) {
-        alert(`¡Éxito! Cupón aplicado: ${result.percent}% de descuento.`);
-    } else {
-        alert("El cupón ingresado no es válido.");
-        codeInput.value = '';
+    try {
+        const response = await fetch(`http://localhost:3000/coupon/${code}`);
+        const data = await response.json();
+
+        if (data.valid) {
+            CartLogic.setDiscount(data.discount);
+            showMessage(`¡Cupón aplicado! ${data.discount * 100}% de descuento.`, 'success');
+            renderCart();
+        } else {
+            CartLogic.setDiscount(0);
+            showMessage("El cupón no es válido.", 'error');
+            codeInput.value = '';
+            renderCart();
+        }
+    } catch (error) {
+        console.error(error);
+        showMessage("Error al validar cupón", 'error');
     }
-    renderCart();
 }
 
 function handleClearAll() {
-    if(confirm('¿Estás seguro de vaciar todo el carrito?')) {
+    if(confirm('¿Estás seguro de vaciar el carrito?')) {
         CartLogic.clearCart();
         renderCart();
+        showMessage("El carrito ha sido vaciado", 'success');
     }
 }
 
-function handleCheckout() {
+async function handleCheckout() {
     const cart = CartLogic.getCart();
     if (cart.length === 0) return;
 
-    cart.forEach(cartItem => {
-        const product = products.find(p => p.id === cartItem.id);
-        if (product) {
-            product.stock -= cartItem.quantity;
-            if (product.stock < 0) product.stock = 0; 
+    // Cambiar estado del botón mientras carga
+    const btn = document.getElementById('btn-checkout');
+    const prevText = btn.value;
+    btn.value = "Procesando...";
+    btn.disabled = true;
+
+    try {
+        const response = await fetch('http://localhost:3000/checkout', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ cart: cart })
+        });
+        
+        const data = await response.json();
+
+        if (data.ok) {
+            showMessage("¡Compra realizada con éxito! Gracias.", 'success');
+            
+            CartLogic.clearCart();
+            renderCart();
+            await loadProducts(); 
+
+        } else {
+            showMessage("Error: " + data.message, 'error');
         }
-    });
-
-    saveStockToStorage(products);
-
-    alert("¡Compra realizada con éxito!\nGracias por confiar en Eclipse Gaming.");
-    
-    CartLogic.clearCart();
-    renderCart();
-    renderProducts();
+    } catch (error) {
+        console.error("Error en checkout:", error);
+        showMessage("Error de conexión al finalizar compra", 'error');
+    } finally {
+        // Restaurar botón (aunque el carrito se vacíe, es buena práctica)
+        btn.value = prevText;
+        if (CartLogic.getCart().length > 0) btn.disabled = false;
+    }
 }
 
 function handleSearch(query) {
     const filteredList = filterProducts(query);
     renderProducts(filteredList);
-    
-    if (query.length > 0) {
-        showSuggestions(filteredList);
-    } else {
-        showSuggestions([]);
-    }
+    if (query.length > 0) showSuggestions(filteredList);
+    else showSuggestions([]);
 }
 
 // --- INICIALIZACIÓN ---
 
 document.addEventListener('DOMContentLoaded', () => {
-    const savedStock = loadStockFromStorage();
-    if (savedStock) {
-        savedStock.forEach(savedItem => {
-            const product = products.find(p => p.id === savedItem.id);
-            if (product) {
-                product.stock = savedItem.stock;
-            }
-        });
-    }
-
-    renderProducts(products); 
-
+    loadProducts();
     const storedCart = loadCartFromCookie();
     CartLogic.setCart(storedCart);
-    
     renderCart();
 
-    // Event Listeners
     document.getElementById('btn-login').addEventListener('click', handleLogin);
     document.getElementById('btn-logout').addEventListener('click', handleLogout);
-    
     document.getElementById('btn-apply-coupon').addEventListener('click', handleApplyCoupon);
     document.getElementById('btn-clear').addEventListener('click', handleClearAll);
     document.getElementById('btn-checkout').addEventListener('click', handleCheckout);
@@ -330,14 +385,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const cartBody = document.getElementById('cart-body');
-    
     cartBody.addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-remove')) {
             const id = parseInt(e.target.dataset.id);
             handleRemove(id);
         }
     });
-    
     cartBody.addEventListener('change', (e) => {
         if (e.target.classList.contains('qty-input')) {
             const id = parseInt(e.target.dataset.id);

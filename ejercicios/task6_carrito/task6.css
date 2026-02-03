@@ -164,6 +164,33 @@ input[type="number"] {
     display: none; /* Oculto en escritorio */
 }
 
+/* --- NUEVO: BARRA DE NOTIFICACIONES SUPERIOR --- */
+#notification-bar {
+    position: fixed;
+    top: -60px; /* Inicialmente oculto arriba */
+    left: 0;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+    z-index: 3000;
+    transition: top 0.4s ease-in-out;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    font-size: 1rem;
+}
+
+/* Clase para mostrar la barra */
+#notification-bar.show {
+    top: 0;
+}
+
+/* Estilos según tipo de mensaje */
+#notification-bar.success { background-color: #27ae60; } /* Verde */
+#notification-bar.error { background-color: #e74c3c; }   /* Rojo */
+
 /* --- RESPONSIVE / MOBILE (MENOS DE 900PX) --- */
 @media (max-width: 900px) {
     body { 
