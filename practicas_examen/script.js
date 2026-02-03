@@ -38,5 +38,3 @@ searchInput.addEventListener('keyup', () => {
             filmsContainer.innerHTML += film.displayFilm();
         });
 });
-
-//jorge putero
