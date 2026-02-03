@@ -9,3 +9,21 @@ const filmsContainer = document.getElementById('films-container');
 films.forEach(film => {
     filmsContainer.innerHTML += film.displayFilm();
 });
+
+//store a cookie with the film with the highest rating
+const topFilm = films.reduce((prev, current) => (prev.rating > current.rating) ? prev : current);
+document.cookie = `topFilm=${topFilm.name}; max-age=3600; path=/`;
+//show the cookie valuen in a div if there is not cookie show "No cookie found"
+const cookieContainer = document.getElementById('cookie-container');
+if (document.cookie) {
+    const cookies = document.cookie.split('; ');
+    const topFilmCookie = cookies.find(row => row.startsWith('topFilm='));
+    if (topFilmCookie) {
+        const topFilmName = topFilmCookie.split('=')[1];
+        cookieContainer.innerHTML = `Top Film Cookie: ${topFilmName}`;
+    } else {
+        cookieContainer.innerHTML = 'No cookie found';
+    }
+} else {
+    cookieContainer.innerHTML = 'No cookie found';
+}
