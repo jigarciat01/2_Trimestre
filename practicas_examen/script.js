@@ -20,10 +20,21 @@ if (document.cookie) {
     const topFilmCookie = cookies.find(row => row.startsWith('topFilm='));
     if (topFilmCookie) {
         const topFilmName = topFilmCookie.split('=')[1];
-        cookieContainer.innerHTML = `Top Film Cookie: ${topFilmName}`;
+        cookieContainer.innerHTML = `<strong>Top Film Cookie:</strong> ${topFilmName}`;
     } else {
         cookieContainer.innerHTML = 'No cookie found';
     }
 } else {
     cookieContainer.innerHTML = 'No cookie found';
 }
+
+//crea una barra de busqueda que filtre las peliculas por nombre de forma dinamica con key up event
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('keyup', () => {
+    const searchTerm = searchInput.value.toLowerCase();
+    filmsContainer.innerHTML = '';
+    films.filter(film => film.name.toLowerCase().includes(searchTerm))
+        .forEach(film => {
+            filmsContainer.innerHTML += film.displayFilm();
+        });
+});
