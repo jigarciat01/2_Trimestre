@@ -6,7 +6,7 @@ export class Film {
 
     constructor(name, rating, year, description) {
         this.#name = name;
-        this.#rating = rating;
+        this.rating = rating; // Usa el setter para validar
         this.#year = year;
         this.#description = description;
     }
@@ -24,6 +24,9 @@ export class Film {
     }
 
     set rating(rating) {
+        if (rating < 5) {
+            throw new Error(`El rating ${rating} es menor que 5. La película no será añadida.`);
+        }
         this.#rating = rating;
     }
 

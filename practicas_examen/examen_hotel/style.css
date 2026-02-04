@@ -1,0 +1,10 @@
+body { font-family: 'Segoe UI', sans-serif; background: #eee; margin: 0; }
+header { background: #2c3e50; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+.toolbar { background: white; padding: 15px; margin: 20px; border-radius: 8px; display: flex; gap: 20px; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
+.room-card { background: white; padding: 15px; border-radius: 8px; border: 1px solid #ccc; position: relative; }
+.room-card.booked { background-color: #ffdddd; border-color: #e74c3c; }
+.room-card.available { background-color: #ddffdd; border-color: #27ae60; }
+.price { font-size: 1.2em; font-weight: bold; color: #2c3e50; }
+.btn-book { margin-top: 10px; padding: 5px 10px; cursor: pointer; }
+#msg-container { text-align: center; padding: 10px; font-weight: bold; }
