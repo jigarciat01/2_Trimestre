@@ -9,4 +9,8 @@ export class counter{
     getvalue() {
         return this.#count;
     }
+
+    setvalue(count) {
+        this.#count=count;
+    }
 }
