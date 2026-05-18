@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>TechSupport - Tickets</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="main.js"></script> 
+</head>
+<body>
+    <header>
+        <h1>TechSupport Dashboard</h1>
+        <div id="user-panel">
+            <span id="welcome-msg">Invitado</span>
+            <button id="btn-login">Login</button>
+            <button id="btn-logout" style="display:none;">Logout</button>
+        </div>
+    </header>
+
+    <div id="notification-area"></div>
+
+    <main class="container">
+        <section class="controls">
+            <button id="btn-load">Cargar Tickets</button>
+            <select id="filter-priority">
+                <option value="all">Todas las prioridades</option>
+                <option value="Alta">Alta</option>
+                <option value="Media">Media</option>
+                <option value="Baja">Baja</option>
+            </select>
+            <div id="stats-area">
+                Total Horas Estimadas: <span id="total-hours">0</span>
+            </div>
+        </section>
+
+        <section id="ticket-container" class="grid-layout">
+            </section>
+    </main>
+</body>
+</html>

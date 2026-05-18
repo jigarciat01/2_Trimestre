@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel California Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="main.js"></script>
+</head>
+<body>
+    <header>
+        <h1>🏨 Hotel California</h1>
+        <div id="user-info">
+            <span id="username-display">Visitante</span>
+            <button id="btn-login">Entrar</button>
+        </div>
+    </header>
+
+    <div id="msg-container"></div>
+
+    <section class="toolbar">
+        <button id="btn-load">Cargar Habitaciones</button>
+        
+        <label>Filtrar por tipo:</label>
+        <select id="filter-type">
+            <option value="all">Todas</option>
+            <option value="Suite">Suite</option>
+            <option value="Standard">Standard</option>
+            <option value="Economy">Economy</option>
+        </select>
+
+        <div class="stats">
+            Ingresos potenciales (disponibles): <span id="total-revenue">0</span>€
+        </div>
+    </section>
+
+    <main id="rooms-grid" class="grid">
+        </main>
+</body>
+</html>

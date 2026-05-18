@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="module" src="script.js" defer></script>
+</head>
+<body>
+    <!-- //You have got a array of fims with this attributes
+//name, rating, year
+//brief description
+//create a js code for displaying the films in a div
+//the films will be in a array of objects
+//you need to create a class Film with a constructor that takes the attributes
+//create a method displayFilm that will return a string with the film details
+//getters and setters for each private attribute -->
+    <input type="text" id="search-input" placeholder="Enter film value"><br><br>
+    
+    <h3>Añadir nueva película</h3>
+    <form id="add-film-form">
+        <input type="text" id="film-name" placeholder="Nombre" required><br>
+        <input type="number" id="film-rating" placeholder="Rating (0-10)" step="0.1" min="0" max="10" required><br>
+        <input type="number" id="film-year" placeholder="Año" required><br>
+        <input type="text" id="film-description" placeholder="Descripción" required><br>
+        <button type="submit">Añadir Película</button>
+    </form>
+    <div id="error-container" style="color: red;"></div>
+    
+    <h3>Lista de películas</h3>
+    <div id="films-container"></div>
+    <div id="cookie-container"></div>
+
+</body>
+</html>
