@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="script.js" defer></script>
+	<title>Trivial Full-Stack: 6 Categorías</title>
+</head>
+<body>
+	<header>
+		<h1>🏆 Trivial Full-Stack</h1>
+		<div class="estado-juego">
+			<h2>Puntos: <span id="puntos-display">0</span></h2>
+			<div class="progreso-quesitos">
+				<div class="tema-progreso"><div id="q-geografia" class="quesito-icono geografia"></div>Geo</div>
+				<div class="tema-progreso"><div id="q-entretenimiento" class="quesito-icono entretenimiento"></div>Ent</div>
+				<div class="tema-progreso"><div id="q-historia" class="quesito-icono historia"></div>Hist</div>
+				<div class="tema-progreso"><div id="q-arte_literatura" class="quesito-icono arte"></div>Arte</div>
+				<div class="tema-progreso"><div id="q-ciencia" class="quesito-icono ciencia"></div>Cien</div>
+				<div class="tema-progreso"><div id="q-deportes" class="quesito-icono deportes"></div>Dep</div>
+			</div>
+		</div>
+	</header>
+
+	<div id="container">
+		<div id="marcador">
+			<div id="cartelGanador">
+				<p id="ganadorTexto">¡Click en "GIRAR"!</p>
+			</div>
+		</div>
+
+		<div id="ruleta">
+			<div id="opcionesContainer"></div>
+			<div id="sortear"><p>GIRAR</p></div>
+		</div>
+
+        <div id="feedback-container" class="oculto"></div>
+	</div>
+
+	<dialog id="modal-pregunta">
+		<div id="tituloForm">
+			<p id="tema-pregunta">Tema</p>
+		</div>
+		<div id="formContainer" class="contenedor-pregunta">
+			<h3 id="texto-pregunta">Cargando...</h3>
+			<div id="opciones-respuestas" class="opciones"></div>
+		</div>
+	</dialog>
+
+	<footer>
+		<div class="panel-inferior">
+			<div class="guardar-zona">
+				<h3>Guardar Partida</h3>
+				<input type="text" id="nick" placeholder="Tu Nombre">
+				<button id="btn-enviar">Enviar al Servidor</button>
+			</div>
+			<div class="ranking-zona">
+				<h3>Top Jugadores</h3>
+				<div id="ranking-lista">Aún no hay datos.</div>
+			</div>
+		</div>
+	</footer>
+</body>
+</html>
