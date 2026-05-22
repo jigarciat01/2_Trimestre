@@ -56,20 +56,5 @@
         { "pregunta": "¿Cuántos sets tiene que ganar un jugador para ganar un partido de tenis masculino de Grand Slam?", "respuestas": ["2", "3", "4", "5"], "correcta": 1 },
         { "pregunta": "¿Qué país ganó el Mundial de fútbol de 2010?", "respuestas": ["Brasil", "Alemania", "España", "Italia"], "correcta": 2 },
         { "pregunta": "¿Cómo se llama el torneo de tenis que se juega en césped en Londres?", "respuestas": ["Roland Garros", "US Open", "Wimbledon", "Open de Australia"], "correcta": 2 }
-    ],
-    "cine": [
-        { "pregunta": "¿Qué película ganó el Oscar a Mejor Película en 2004?", "respuestas": ["El Señor de los Anillos: El Retorno del Rey", "Gladiator", "Titanic", "Avatar"], "correcta": 0 },
-        { "pregunta": "¿Quién dirigió 'Jurassic Park'?", "respuestas": ["George Lucas", "Steven Spielberg", "James Cameron", "Christopher Nolan"], "correcta": 1 },
-        { "pregunta": "¿De qué color es la píldora que toma Neo en Matrix para despertar?", "respuestas": ["Azul", "Roja", "Verde", "Amarilla"], "correcta": 1 },
-        { "pregunta": "¿A qué casa de Hogwarts pertenece Harry Potter?", "respuestas": ["Gryffindor", "Slytherin", "Hufflepuff", "Ravenclaw"], "correcta": 0 },
-        { "pregunta": "¿Quién interpreta al Capitán Jack Sparrow en Piratas del Caribe?", "respuestas": ["Orlando Bloom", "Brad Pitt", "Johnny Depp", "Tom Cruise"], "correcta": 2 },
-        { "pregunta": "¿En qué mítica franquicia se dice la frase 'Yo soy tu padre'?", "respuestas": ["Star Trek", "El Padrino", "Harry Potter", "Star Wars"], "correcta": 3 },
-        { "pregunta": "¿Cuál fue el primer largometraje de animación de Pixar?", "respuestas": ["Bichos", "Toy Story", "Monstruos S.A.", "Buscando a Nemo"], "correcta": 1 },
-        { "pregunta": "¿Por qué película ganó finalmente Leonardo DiCaprio su primer Oscar a mejor actor?", "respuestas": ["El Renacido", "El Lobo de Wall Street", "Titanic", "Infiltrados"], "correcta": 0 },
-        { "pregunta": "¿En qué película aparece el coche máquina del tiempo DeLorean?", "respuestas": ["Cazafantasmas", "Regreso al futuro", "Blade Runner", "Mad Max"], "correcta": 1 },
-        { "pregunta": "¿Quién es el actor que da vida a Iron Man en el Universo Cinematográfico de Marvel?", "respuestas": ["Chris Evans", "Chris Hemsworth", "Mark Ruffalo", "Robert Downey Jr."], "correcta": 3 },
-        { "pregunta": "¿Cómo se llama el mafioso protagonista interpretado por Marlon Brando en 'El Padrino'?", "respuestas": ["Tony Montana", "Vito Corleone", "Michael Corleone", "Al Capone"], "correcta": 1 },
-        { "pregunta": "¿En qué ciudad ficticia transcurren principalmente las aventuras de Batman?", "respuestas": ["Metrópolis", "Central City", "Gotham", "Star City"], "correcta": 2 },
-        { "pregunta": "¿Qué director es el responsable de la película 'Avatar'?", "respuestas": ["James Cameron", "Peter Jackson", "Ridley Scott", "Quentin Tarantino"], "correcta": 0 }
     ]
 }

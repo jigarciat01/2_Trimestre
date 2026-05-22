@@ -5,31 +5,41 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Trivial Full-Stack - Un juego de preguntas y respuestas dinámico y moderno.">
+	
+	<!-- Fuentes de Google Fonts para un diseño moderno (Outfit) -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+	
+	<!-- Hojas de estilos y lógica JS -->
 	<link rel="stylesheet" href="style.css">
-	<script src="/socket.io/socket.io.js"></script>
 	<script src="script.js" defer></script>
+	
 	<title>Trivial Full-Stack: 6 Categorías</title>
 </head>
 <body>
+	<!-- Orbes decorativos animados en segundo plano para el efecto visual de profundidad -->
 	<div class="bg-orb orb-1"></div>
 	<div class="bg-orb orb-2"></div>
 	<div class="bg-orb orb-3"></div>
 
+	<!-- Cabecera principal con diseño Glassmorphism -->
 	<header class="glass-panel main-header">
 		<h1>🏆 Trivial Full-Stack</h1>
+		
+		<!-- Indicador del turno actual en tiempo real -->
 		<div class="header-turno-container">
 			<div id="indicador-turno" class="turno-indicador">Esperando jugadores...</div>
-			<button id="btn-saltar-turno" class="btn-warning oculto">Saltar Turno ⏳</button>
 		</div>
+		
+		<!-- Panel del estado actual del jugador activo (puntos y quesitos ganados) -->
 		<div class="estado-juego">
 			<div class="puntos-container">
 				<h2>Puntos</h2>
 				<span id="puntos-display" class="puntos-valor">0</span>
 			</div>
 			
+			<!-- Indicador visual de los 6 quesitos de categorías -->
 			<div class="progreso-wrapper">
 				<div class="progreso-quesitos">
 					<div class="tema-progreso"><div id="q-geografia" class="quesito-icono geografia"></div><span>Geo</span></div>
@@ -40,6 +50,8 @@
 					<div class="tema-progreso"><div id="q-deportes" class="quesito-icono deportes"></div><span>Dep</span></div>
 				</div>
 			</div>
+			
+			<!-- Botones rápidos de control del lobby -->
 			<div class="botones-header">
 				<button id="btn-anadir-jugador" class="btn-primary">Añadir Jugador</button>
 				<button id="btn-reiniciar" class="btn-secondary">Reiniciar Juego</button>
@@ -47,53 +59,58 @@
 		</div>
 	</header>
 
-	<section id="invite-panel" class="glass-panel invite-panel">
-		<span class="invite-label">📢 Invita a otros jugadores:</span>
-		<div class="invite-input-wrapper">
-			<input type="text" id="invite-url" readonly value="Cargando enlace..." onclick="this.select()">
-			<button id="btn-copy-invite" class="btn-copy">Copiar Enlace</button>
-		</div>
-	</section>
-
+	<!-- Contenido principal: Ruleta y avisos -->
 	<main id="container">
 		<div id="ruleta-wrapper">
+			<!-- Marcador superior que señala la categoría ganadora -->
 			<div id="marcador">
 				<div id="cartelGanador">
 					<p id="ganadorTexto">¡Click en "GIRAR"!</p>
 				</div>
 			</div>
 
+			<!-- Componente físico de la ruleta -->
 			<div id="ruleta" class="glass-ruleta">
+				<!-- Contenedor dinámico donde JS inyecta las rebanadas y textos -->
 				<div id="opcionesContainer"></div>
+				<!-- Botón central para efectuar el giro -->
 				<div id="sortear" class="btn-sortear"><p>GIRAR</p></div>
 			</div>
 		</div>
 
-        <div id="feedback-container" class="oculto"></div>
+		<!-- Contenedor de notificaciones y feedback de las rondas (correcto/incorrecto) -->
+		<div id="feedback-container" class="oculto"></div>
 
+		<!-- Panel flotante que se muestra en caso de ganar los 6 quesitos -->
 		<div id="mensaje-victoria" class="glass-panel oculto victoria-panel">
 			<h2>¡HAS GANADO!</h2>
 			<p>Has conseguido todos los quesitos.</p>
 		</div>
 	</main>
 
+	<!-- Diálogo modal nativo (dialog) para responder a las preguntas -->
 	<dialog id="modal-pregunta" class="glass-modal">
 		<div id="tituloForm">
 			<p id="tema-pregunta">Tema</p>
+			<!-- Cuenta regresiva visual (20 segundos) -->
 			<div id="temporizador">20</div>
 		</div>
 		<div id="formContainer" class="contenedor-pregunta">
 			<h3 id="texto-pregunta">Cargando...</h3>
+			<!-- Botones de las 4 opciones de respuesta (inyectados dinámicamente) -->
 			<div id="opciones-respuestas" class="opciones"></div>
 		</div>
 	</dialog>
 
+	<!-- Panel inferior: Lista de jugadores en la sala y Ranking Global de la sesión -->
 	<footer>
 		<div class="panel-inferior glass-panel">
+			<!-- Lista de jugadores en esta sala WebSocket -->
 			<div class="sala-zona">
 				<h3>Jugadores en Partida</h3>
 				<ul id="lista-sala" class="lista-sala"></ul>
 			</div>
+			<!-- Tabla global ordenada de mejores puntuaciones -->
 			<div class="ranking-zona">
 				<h3>Top Global</h3>
 				<div id="ranking-lista">Aún no hay datos.</div>
