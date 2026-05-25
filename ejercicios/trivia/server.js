@@ -7,7 +7,6 @@ const os = require('os');
 // Servidor Express y base de datos de preguntas
 const app = express();
 const PORT = process.env.PORT || 3000;
-let rankingGlobal = [];
 const bancoPreguntas = require('./quesitos.json');
 
 // Estado de la sala de juego en memoria
@@ -42,8 +41,7 @@ app.get('/pregunta/:categoria', (req, res) => {
 const getPublicState = () => ({
     jugadores: gameState.jugadores,
     turnoActualIndex: gameState.turnoActualIndex,
-    jugadorTurnoActual: gameState.jugadores[gameState.turnoActualIndex] || null,
-    rankingGlobal
+    jugadorTurnoActual: gameState.jugadores[gameState.turnoActualIndex] || null
 });
 
 // Broadcast a todos los WebSockets abiertos
@@ -120,17 +118,6 @@ wss.on('connection', (ws) => {
                     gameState.turnoActualIndex = (gameState.turnoActualIndex + 1) % gameState.jugadores.length;
                 }
             }
-
-            // Actualizar tabla de clasificación global
-            const totalQuesitos = Object.values(jugadorTurno.quesitosObj).filter(Boolean).length;
-            const rankJug = rankingGlobal.find(r => r.nombre === jugadorTurno.nombre);
-            if (rankJug) {
-                rankJug.puntos = jugadorTurno.puntos;
-                rankJug.quesitos = totalQuesitos;
-            } else {
-                rankingGlobal.push({ nombre: jugadorTurno.nombre, puntos: jugadorTurno.puntos, quesitos: totalQuesitos });
-            }
-            rankingGlobal.sort((a, b) => b.puntos - a.puntos);
 
             broadcast({
                 type: 'resultadoRespuesta',

@@ -71,7 +71,6 @@ function manejarMensaje(msg) {
         else misJugadoresLocales.forEach(j => enviarMensaje('join', j));
     } else if (type === 'gameState') {
         renderizarLobby(state);
-        renderizarRanking(state.rankingGlobal || []);
     } else if (type === 'ruletaGirando') {
         categoriaActual = categorias[randomIdx];
         girosAcumulados = nuevosGiros;
@@ -176,9 +175,12 @@ function renderizarLobby(state) {
         DOM.mensajeVictoria.innerHTML = `<h2>¡${act.nombre.toUpperCase()} HA GANADO!</h2><p>Consiguió todos los quesitos.</p>`;
     }
 
-    // Listado de la sala de espera
-    DOM.listaSala.innerHTML = state.jugadores.map((j, idx) => {
-        const esTurno = idx === state.turnoActualIndex;
+    // Listado de la sala de espera actuando como ranking
+    const jugadoresOrdenados = [...state.jugadores].sort((a, b) => b.puntos - a.puntos);
+    DOM.listaSala.innerHTML = jugadoresOrdenados.map((j) => {
+        // Necesitamos el índice original para saber si es su turno
+        const originalIdx = state.jugadores.findIndex(orig => orig.id === j.id);
+        const esTurno = originalIdx === state.turnoActualIndex;
         const esLocal = misJugadoresLocales.some(l => l.id === j.id);
         const qCount = Object.values(j.quesitosObj).filter(Boolean).length;
         return `<li class="${esTurno ? 'turno-activo' : ''}">
@@ -234,10 +236,6 @@ function validarRespuesta(idx) {
     });
 }
 
-function renderizarRanking(tabla) {
-    const listHtml = tabla.map(j => `<li><strong>${j.nombre}</strong>: ${j.puntos} pts (${j.quesitos}/7)</li>`).join('');
-    $('ranking-lista').innerHTML = `<ol>${listHtml}</ol>`;
-}
 
 // ==========================================================
 // ====== ALMACENAMIENTO Y REINICIO =========================
