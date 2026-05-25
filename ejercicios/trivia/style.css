@@ -18,7 +18,7 @@
 	--accent-color: #3b82f6;
 	--accent-hover: #2563eb;
 
-	/* Colores de las 6 categorías (deben coincidir con script.js) */
+	/* Colores de las 7 categorías (deben coincidir con script.js) */
 	--cat-geo: #3498db;
 	/* Geografía (Azul) */
 	--cat-ent: #e84393;
@@ -31,6 +31,8 @@
 	/* Ciencia (Verde) */
 	--cat-dep: #e67e22;
 	/* Deportes (Naranja) */
+	--cat-vj: #32cd32;
+	/* Videojuegos (Verde lima) */
 }
 
 /* ==========================================================
@@ -210,7 +212,7 @@ h1 {
 	--cat-color: var(--cat-hist);
 }
 
-.quesito-icono.arte {
+.quesito-icono.arte_literatura {
 	--cat-color: var(--cat-arte);
 }
 
@@ -479,6 +481,12 @@ h1 {
 	color: #38bdf8;
 }
 
+#feedback-container.warning {
+	background: rgba(251, 191, 36, 0.2);
+	border: 1px solid #fbbf24;
+	color: #fbbf24;
+}
+
 /* ==========================================================
    ====== DIÁLOGO MODAL DE PREGUNTAS ========================
    ========================================================== */
@@ -635,12 +643,48 @@ footer {
 
 .lista-sala li {
 	background: rgba(255, 255, 255, 0.03);
-	padding: 0.5rem 1rem;
+	padding: 0.8rem 1rem;
 	border-radius: 8px;
 	margin-bottom: 0.5rem;
 	border: 1px solid rgba(255, 255, 255, 0.05);
 	display: flex;
+	flex-direction: column;
+}
+
+.jugador-info-fila {
+	display: flex;
 	justify-content: space-between;
+	width: 100%;
+}
+
+.quesitos-mini-container {
+	display: flex;
+	gap: 6px;
+	justify-content: flex-end;
+	margin-top: 8px;
+}
+
+.quesito-mini {
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: #334155;
+	border: 1px solid #475569;
+	transition: all 0.3s ease;
+}
+
+.quesito-mini.geografia { --cat-color: var(--cat-geo); }
+.quesito-mini.entretenimiento { --cat-color: var(--cat-ent); }
+.quesito-mini.historia { --cat-color: var(--cat-hist); }
+.quesito-mini.arte_literatura { --cat-color: var(--cat-arte); }
+.quesito-mini.ciencia { --cat-color: var(--cat-cien); }
+.quesito-mini.deportes { --cat-color: var(--cat-dep); }
+.quesito-mini.videojuegos { --cat-color: var(--cat-vj); }
+
+.quesito-mini.conseguido {
+	background: var(--cat-color);
+	border-color: #fff;
+	box-shadow: 0 0 8px var(--cat-color);
 }
 
 /* Estilo destacado para la fila del turno activo */

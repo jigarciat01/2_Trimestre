@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Shelter</title>
+    <style>
+        body { font-family: sans-serif; padding: 2rem; background: #f4f4f4; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
+        .controls { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px;}
+        #pet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .card { background: white; padding: 15px; border-radius: 8px; border-top: 5px solid gray; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .card.Dog { border-color: #3498db; }
+        .card.Cat { border-color: #e67e22; }
+        button { cursor: pointer; padding: 5px 10px; }
+        .btn-adopt { background: #27ae60; color: white; border: none; width: 100%; margin-top: 10px; }
+    </style>
+    <script type="module" src="main.js"></script>
+</head>
+<body>
+    <header>
+        <h1>🏠 Adopta un Amigo</h1>
+        <div id="user-panel">
+            <span id="welcome-msg">Invitado</span>
+            <button id="btn-login">Soy Adoptante</button>
+        </div>
+    </header>
+
+    <section class="controls">
+        <button id="btn-load">Ver Mascotas Disponibles</button>
+        <select id="filter-type">
+            <option value="all">Todas</option>
+            <option value="Dog">Perros 🐶</option>
+            <option value="Cat">Gatos 🐱</option>
+        </select>
+    </section>
+
+    <main id="pet-grid"></main>
+</body>
+</html>

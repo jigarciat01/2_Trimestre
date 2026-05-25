@@ -102,14 +102,17 @@ wss.on('connection', (ws) => {
         // Validar respuesta del jugador
         if (msg.type === 'respuestaValidada' && jugadorTurno?.socketId === ws.id) {
             let quesitoConseguido = false;
+            let intentoQuesitoFallido = false;
             if (msg.correcta) {
                 jugadorTurno.puntos += 10;
                 jugadorTurno.rachas[msg.categoriaId]++;
                 // Obtener quesito tras 3 aciertos en el mismo tema
                 if (jugadorTurno.rachas[msg.categoriaId] >= 3 && !jugadorTurno.quesitosObj[msg.categoriaId]) {
-                    if (Math.random() < 1) {
+                    if (Math.random() < 0.25) {
                         jugadorTurno.quesitosObj[msg.categoriaId] = true;
                         quesitoConseguido = true;
+                    } else {
+                        intentoQuesitoFallido = true;
                     }
                 }
             } else {
@@ -122,9 +125,12 @@ wss.on('connection', (ws) => {
             broadcast({
                 type: 'resultadoRespuesta',
                 nombre: jugadorTurno.nombre,
+                jugadorId: jugadorTurno.id,
                 correcta: msg.correcta,
                 timeout: msg.timeout,
                 quesitoConseguido,
+                intentoQuesitoFallido,
+                racha: jugadorTurno.rachas[msg.categoriaId],
                 categoriaId: msg.categoriaId
             });
             broadcast({ type: 'gameState', state: getPublicState() });

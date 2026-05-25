@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Digital Restaurant</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="main.js"></script>
+</head>
+<body>
+    <header>
+        <h1>🍽️ GastroBar Digital</h1>
+        <div id="table-info">
+            <span id="table-display">Mesa no asignada</span>
+            <button id="btn-table">Asignar Mesa</button>
+        </div>
+    </header>
+
+    <div id="layout">
+        <section id="menu-section">
+            <div class="controls">
+                <button id="btn-load">Cargar Menú</button>
+                <select id="filter-options">
+                    <option value="all">Todo</option>
+                    <option value="Food">Solo Comida</option>
+                    <option value="Drink">Solo Bebidas</option>
+                    <option value="Vegetarian">🌱 Vegetariano (Food)</option>
+                </select>
+            </div>
+            <div id="menu-grid" class="grid"></div>
+        </section>
+
+        <aside id="bill-section">
+            <h2>Tu Cuenta</h2>
+            <ul id="order-list"></ul>
+            <div class="total-area">
+                Total: <span id="total-price">0.00</span>€
+            </div>
+            <button id="btn-pay">Pagar Pedido</button>
+            <div id="msg-area"></div>
+        </aside>
+    </div>
+</body>
+</html>

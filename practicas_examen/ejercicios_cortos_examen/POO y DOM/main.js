@@ -8,7 +8,7 @@ const valor= new counter();
 document.addEventListener('DOMContentLoaded',() => {
     const cookies = document.cookie.split('; ');
     const userCookie = cookies.find(row => row.startsWith('number='));
-
+    console.log(userCookie);
     const numero= userCookie.split('=')[1];
 
     valor.setvalue(numero);

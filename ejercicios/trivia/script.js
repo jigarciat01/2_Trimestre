@@ -64,7 +64,7 @@ const enviarMensaje = (type, data = {}) => ws?.readyState === WebSocket.OPEN && 
 
 // Manejador centralizado de mensajes recibidos por WebSockets
 function manejarMensaje(msg) {
-    const { type, state, randomIdx, girosAcumulados: nuevosGiros, correcta, respuestas, nombre, timeout, quesitoConseguido, categoriaId } = msg;
+    const { type, state, randomIdx, girosAcumulados: nuevosGiros, correcta, respuestas, nombre, jugadorId, timeout, quesitoConseguido, intentoQuesitoFallido, racha, categoriaId } = msg;
 
     if (type === 'askName') {
         if (misJugadoresLocales.length === 0) agregarJugadorLocal();
@@ -87,7 +87,13 @@ function manejarMensaje(msg) {
         DOM.modalPregunta.close();
         const catNombre = categorias.find(c => c.id === categoriaId)?.nombre || categoriaId;
         if (correcta) {
-            mostrarMensaje(`✅ ¡${nombre} acertó! (+10 pts)${quesitoConseguido ? `\n🎉 ¡CONSIGUIÓ EL QUESITO DE ${catNombre.toUpperCase()}!` : ''}`, 'success');
+            if (quesitoConseguido) {
+                mostrarMensaje(`✅ ¡${nombre} acertó! (+10 pts)\n🎉 ¡CONSIGUIÓ EL QUESITO DE ${catNombre.toUpperCase()}!`, 'success');
+            } else if (intentoQuesitoFallido) {
+                mostrarMensaje(`✅ ¡${nombre} acertó! (+10 pts) (Racha de ${racha} en ${catNombre})\n⚠️ ¡Mala Suerte! No le tocó el quesito.`, 'warning');
+            } else {
+                mostrarMensaje(`✅ ¡${nombre} acertó! (+10 pts)`, 'success');
+            }
         } else {
             mostrarMensaje(`❌ A ${nombre} ${timeout ? 'se le agotó el tiempo' : 'falló'}.\nCorrecta: "${textoRespuestaCorrecta}".`, 'error');
         }
@@ -183,9 +189,19 @@ function renderizarLobby(state) {
         const esTurno = originalIdx === state.turnoActualIndex;
         const esLocal = misJugadoresLocales.some(l => l.id === j.id);
         const qCount = Object.values(j.quesitosObj).filter(Boolean).length;
+        const miniQuesitosHTML = categorias.map(cat => {
+            const conseguido = j.quesitosObj[cat.id] ? 'conseguido' : '';
+            return `<div class="quesito-mini ${cat.id} ${conseguido}" title="${cat.nombre}"></div>`;
+        }).join('');
+
         return `<li class="${esTurno ? 'turno-activo' : ''}">
-            <span><strong>${j.nombre}</strong>${esLocal ? ' <span class="player-tag-you">Tú</span>' : ''}</span>
-            <span>${j.puntos} pts | 🧀 ${qCount}/7</span>
+            <div class="jugador-info-fila">
+                <span><strong>${j.nombre}</strong>${esLocal ? ' <span class="player-tag-you">Tú</span>' : ''}</span>
+                <span>${j.puntos} pts</span>
+            </div>
+            <div class="quesitos-mini-container">
+                ${miniQuesitosHTML}
+            </div>
         </li>`;
     }).join('');
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>DJ Launchpad</title>
+    <style>
+        body { background: #222; color: white; font-family: sans-serif; text-align: center; }
+        
+        /* El Grid normal, sin coordenadas raras */
+        #pad-container { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 20px; 
+            max-width: 600px; 
+            margin: 50px auto; 
+        }
+
+        /* Estilo base de los botones */
+        .pad {
+            height: 150px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border: 4px solid #444;
+            transition: transform 0.1s, filter 0.1s;
+            user-select: none; /* Para que no se seleccione el texto al hacer clic rápido */
+        }
+
+        /* Clase para cuando se activa (Click o Tecla) */
+        .active {
+            transform: scale(0.95); /* Se encoge un poco */
+            filter: brightness(1.5); /* Brilla */
+            border-color: white;
+        }
+
+        .key-hint { font-size: 3rem; font-weight: bold; opacity: 0.5; }
+        .name-hint { font-size: 1rem; margin-top: 10px; }
+    </style>
+    <script type="module" src="main.js"></script>
+</head>
+<body>
+    <h1>🎹 DJ Launchpad</h1>
+    <h2 id="dj-display">Invitado</h2>
+    
+    <button id="btn-load">Cargar Mesa</button>
+    <div id="pad-container"></div>
+</body>
+</html>
