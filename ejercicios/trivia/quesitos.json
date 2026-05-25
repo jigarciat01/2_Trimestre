@@ -1,60 +1,526 @@
 {
     "geografia": [
-        { "pregunta": "¿Cuál es la capital de Australia?", "respuestas": ["Sídney", "Melbourne", "Canberra", "Perth"], "correcta": 2 },
-        { "pregunta": "¿Qué río es el más largo del mundo?", "respuestas": ["Nilo", "Amazonas", "Misisipi", "Yangtsé"], "correcta": 1 },
-        { "pregunta": "¿En qué cordillera está el monte Everest?", "respuestas": ["Andes", "Alpes", "Himalaya", "Rocosas"], "correcta": 2 },
-        { "pregunta": "¿Cuál es el país más grande del mundo por superficie?", "respuestas": ["China", "Estados Unidos", "Canadá", "Rusia"], "correcta": 3 },
-        { "pregunta": "¿Qué océano es el más grande del planeta?", "respuestas": ["Pacífico", "Atlántico", "Índico", "Ártico"], "correcta": 0 },
-        { "pregunta": "¿En qué país se encuentra la antigua ciudad de Machu Picchu?", "respuestas": ["Colombia", "Chile", "Ecuador", "Perú"], "correcta": 3 },
-        { "pregunta": "¿Cuál es la capital de Canadá?", "respuestas": ["Toronto", "Ottawa", "Vancouver", "Montreal"], "correcta": 1 },
-        { "pregunta": "¿Qué país tiene forma de bota?", "respuestas": ["Italia", "Grecia", "España", "Portugal"], "correcta": 0 },
-        { "pregunta": "¿Qué río pasa por la ciudad de Roma?", "respuestas": ["Sena", "Támesis", "Tíber", "Danubio"], "correcta": 2 },
-        { "pregunta": "¿Cuál es el continente con mayor número de países?", "respuestas": ["Asia", "Europa", "África", "América"], "correcta": 2 },
-        { "pregunta": "¿Cuál es la montaña más alta de África?", "respuestas": ["Monte Kenia", "Kilimanjaro", "Monte Elgon", "Ras Dashen"], "correcta": 1 },
-        { "pregunta": "¿En qué país está la Torre Eiffel?", "respuestas": ["Alemania", "Francia", "Bélgica", "Suiza"], "correcta": 1 },
-        { "pregunta": "¿Cuál es la capital de Japón?", "respuestas": ["Tokio", "Kioto", "Osaka", "Seúl"], "correcta": 0 }
+        {
+            "pregunta": "¿Cuál es la capital de Australia?",
+            "respuestas": [
+                "Sídney",
+                "Melbourne",
+                "Canberra",
+                "Perth"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Qué río es el más largo del mundo?",
+            "respuestas": [
+                "Nilo",
+                "Amazonas",
+                "Misisipi",
+                "Yangtsé"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿En qué cordillera está el monte Everest?",
+            "respuestas": [
+                "Andes",
+                "Alpes",
+                "Himalaya",
+                "Rocosas"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Cuál es el país más grande del mundo por superficie?",
+            "respuestas": [
+                "China",
+                "Estados Unidos",
+                "Canadá",
+                "Rusia"
+            ],
+            "correcta": 3
+        },
+        {
+            "pregunta": "¿Qué océano es el más grande del planeta?",
+            "respuestas": [
+                "Pacífico",
+                "Atlántico",
+                "Índico",
+                "Ártico"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿En qué país se encuentra la antigua ciudad de Machu Picchu?",
+            "respuestas": [
+                "Colombia",
+                "Chile",
+                "Ecuador",
+                "Perú"
+            ],
+            "correcta": 3
+        },
+        {
+            "pregunta": "¿Cuál es la capital de Canadá?",
+            "respuestas": [
+                "Toronto",
+                "Ottawa",
+                "Vancouver",
+                "Montreal"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Qué país tiene forma de bota?",
+            "respuestas": [
+                "Italia",
+                "Grecia",
+                "España",
+                "Portugal"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Qué río pasa por la ciudad de Roma?",
+            "respuestas": [
+                "Sena",
+                "Támesis",
+                "Tíber",
+                "Danubio"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Cuál es el continente con mayor número de países?",
+            "respuestas": [
+                "Asia",
+                "Europa",
+                "África",
+                "América"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Cuál es la montaña más alta de África?",
+            "respuestas": [
+                "Monte Kenia",
+                "Kilimanjaro",
+                "Monte Elgon",
+                "Ras Dashen"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿En qué país está la Torre Eiffel?",
+            "respuestas": [
+                "Alemania",
+                "Francia",
+                "Bélgica",
+                "Suiza"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Cuál es la capital de Japón?",
+            "respuestas": [
+                "Tokio",
+                "Kioto",
+                "Osaka",
+                "Seúl"
+            ],
+            "correcta": 0
+        }
     ],
     "ciencia": [
-        { "pregunta": "¿Cuál es el símbolo químico del oro?", "respuestas": ["Ag", "Au", "Or", "Pb"], "correcta": 1 },
-        { "pregunta": "¿Qué planeta es conocido como el planeta rojo?", "respuestas": ["Venus", "Marte", "Júpiter", "Saturno"], "correcta": 1 },
-        { "pregunta": "¿Qué gas respiramos los humanos para vivir?", "respuestas": ["Dióxido de carbono", "Hidrógeno", "Oxígeno", "Nitrógeno"], "correcta": 2 },
-        { "pregunta": "¿Cuál es el hueso más largo del cuerpo humano?", "respuestas": ["Tibia", "Fémur", "Húmero", "Peroné"], "correcta": 1 },
-        { "pregunta": "¿Quién formuló la teoría de la relatividad?", "respuestas": ["Isaac Newton", "Nikola Tesla", "Albert Einstein", "Galileo Galilei"], "correcta": 2 },
-        { "pregunta": "¿Cuál es la fórmula química del agua?", "respuestas": ["H2O", "CO2", "O2", "HO2"], "correcta": 0 },
-        { "pregunta": "¿Qué partícula subatómica tiene carga eléctrica negativa?", "respuestas": ["Protón", "Neutrón", "Fotón", "Electrón"], "correcta": 3 },
-        { "pregunta": "¿Cuál es el planeta más cercano al Sol?", "respuestas": ["Mercurio", "Venus", "Tierra", "Marte"], "correcta": 0 },
-        { "pregunta": "¿Qué órgano del cuerpo humano es el encargado de bombear la sangre?", "respuestas": ["Corazón", "Pulmón", "Hígado", "Cerebro"], "correcta": 0 },
-        { "pregunta": "¿Cómo se llama el centro de nuestro sistema solar?", "respuestas": ["La Tierra", "Júpiter", "La Luna", "El Sol"], "correcta": 3 },
-        { "pregunta": "¿A qué velocidad viaja la luz en el vacío (aproximadamente)?", "respuestas": ["30.000 km/s", "300.000 km/s", "3.000 km/s", "1.000.000 km/s"], "correcta": 1 },
-        { "pregunta": "¿Qué rama de la biología estudia los hongos?", "respuestas": ["Botánica", "Zoología", "Micología", "Microbiología"], "correcta": 2 },
-        { "pregunta": "¿Quién es considerado el inventor de la bombilla incandescente comercial?", "respuestas": ["Alexander Graham Bell", "Thomas Alva Edison", "Nikola Tesla", "Benjamin Franklin"], "correcta": 1 }
+        {
+            "pregunta": "¿Cuál es el símbolo químico del oro?",
+            "respuestas": [
+                "Ag",
+                "Au",
+                "Or",
+                "Pb"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Qué planeta es conocido como el planeta rojo?",
+            "respuestas": [
+                "Venus",
+                "Marte",
+                "Júpiter",
+                "Saturno"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Qué gas respiramos los humanos para vivir?",
+            "respuestas": [
+                "Dióxido de carbono",
+                "Hidrógeno",
+                "Oxígeno",
+                "Nitrógeno"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Cuál es el hueso más largo del cuerpo humano?",
+            "respuestas": [
+                "Tibia",
+                "Fémur",
+                "Húmero",
+                "Peroné"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Quién formuló la teoría de la relatividad?",
+            "respuestas": [
+                "Isaac Newton",
+                "Nikola Tesla",
+                "Albert Einstein",
+                "Galileo Galilei"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Cuál es la fórmula química del agua?",
+            "respuestas": [
+                "H2O",
+                "CO2",
+                "O2",
+                "HO2"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Qué partícula subatómica tiene carga eléctrica negativa?",
+            "respuestas": [
+                "Protón",
+                "Neutrón",
+                "Fotón",
+                "Electrón"
+            ],
+            "correcta": 3
+        },
+        {
+            "pregunta": "¿Cuál es el planeta más cercano al Sol?",
+            "respuestas": [
+                "Mercurio",
+                "Venus",
+                "Tierra",
+                "Marte"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Qué órgano del cuerpo humano es el encargado de bombear la sangre?",
+            "respuestas": [
+                "Corazón",
+                "Pulmón",
+                "Hígado",
+                "Cerebro"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Cómo se llama el centro de nuestro sistema solar?",
+            "respuestas": [
+                "La Tierra",
+                "Júpiter",
+                "La Luna",
+                "El Sol"
+            ],
+            "correcta": 3
+        },
+        {
+            "pregunta": "¿A qué velocidad viaja la luz en el vacío (aproximadamente)?",
+            "respuestas": [
+                "30.000 km/s",
+                "300.000 km/s",
+                "3.000 km/s",
+                "1.000.000 km/s"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Qué rama de la biología estudia los hongos?",
+            "respuestas": [
+                "Botánica",
+                "Zoología",
+                "Micología",
+                "Microbiología"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Quién es considerado el inventor de la bombilla incandescente comercial?",
+            "respuestas": [
+                "Alexander Graham Bell",
+                "Thomas Alva Edison",
+                "Nikola Tesla",
+                "Benjamin Franklin"
+            ],
+            "correcta": 1
+        }
     ],
     "entretenimiento": [
-        { "pregunta": "¿Qué serie tiene como protagonista a Walter White?", "respuestas": ["Better Call Saul", "Breaking Bad", "Narcos", "Lost"], "correcta": 1 },
-        { "pregunta": "¿Quién interpretó a Jack en Titanic?", "respuestas": ["Brad Pitt", "Tom Cruise", "Leonardo DiCaprio", "Matt Damon"], "correcta": 2 },
-        { "pregunta": "¿Qué grupo canta 'Bohemian Rhapsody'?", "respuestas": ["Queen", "ABBA", "The Beatles", "Pink Floyd"], "correcta": 0 },
-        { "pregunta": "¿Qué plataforma es conocida por series como Stranger Things?", "respuestas": ["Disney+", "Netflix", "Prime Video", "HBO Max"], "correcta": 1 },
-        { "pregunta": "¿Cómo se llama el universo cinematográfico de Marvel?", "respuestas": ["DCU", "MCU", "UCM", "MCUV"], "correcta": 1 }
+        {
+            "pregunta": "¿Qué serie tiene como protagonista a Walter White?",
+            "respuestas": [
+                "Better Call Saul",
+                "Breaking Bad",
+                "Narcos",
+                "Lost"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Quién interpretó a Jack en Titanic?",
+            "respuestas": [
+                "Brad Pitt",
+                "Tom Cruise",
+                "Leonardo DiCaprio",
+                "Matt Damon"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Qué grupo canta 'Bohemian Rhapsody'?",
+            "respuestas": [
+                "Queen",
+                "ABBA",
+                "The Beatles",
+                "Pink Floyd"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Qué plataforma es conocida por series como Stranger Things?",
+            "respuestas": [
+                "Disney+",
+                "Netflix",
+                "Prime Video",
+                "HBO Max"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Cómo se llama el universo cinematográfico de Marvel?",
+            "respuestas": [
+                "DCU",
+                "MCU",
+                "UCM",
+                "MCUV"
+            ],
+            "correcta": 1
+        }
     ],
     "historia": [
-        { "pregunta": "¿En qué año llegó Cristóbal Colón a América?", "respuestas": ["1492", "1512", "1402", "1604"], "correcta": 0 },
-        { "pregunta": "¿Quién fue el primer emperador romano?", "respuestas": ["Nerón", "Augusto", "Julio César", "Trajano"], "correcta": 1 },
-        { "pregunta": "¿En qué ciudad cayó el Muro de Berlín?", "respuestas": ["Berlín", "Roma", "París", "Viena"], "correcta": 0 },
-        { "pregunta": "¿Qué civilización construyó Machu Picchu?", "respuestas": ["Mayas", "Aztecas", "Incas", "Olmecas"], "correcta": 2 },
-        { "pregunta": "¿Quién fue conocida como la reina de Egipto?", "respuestas": ["Cleopatra", "Nefertiti", "Hatshepsut", "Isis"], "correcta": 0 }
+        {
+            "pregunta": "¿En qué año llegó Cristóbal Colón a América?",
+            "respuestas": [
+                "1492",
+                "1512",
+                "1402",
+                "1604"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Quién fue el primer emperador romano?",
+            "respuestas": [
+                "Nerón",
+                "Augusto",
+                "Julio César",
+                "Trajano"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿En qué ciudad cayó el Muro de Berlín?",
+            "respuestas": [
+                "Berlín",
+                "Roma",
+                "París",
+                "Viena"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Qué civilización construyó Machu Picchu?",
+            "respuestas": [
+                "Mayas",
+                "Aztecas",
+                "Incas",
+                "Olmecas"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Quién fue conocida como la reina de Egipto?",
+            "respuestas": [
+                "Cleopatra",
+                "Nefertiti",
+                "Hatshepsut",
+                "Isis"
+            ],
+            "correcta": 0
+        }
     ],
     "arte_literatura": [
-        { "pregunta": "¿Quién pintó la Mona Lisa?", "respuestas": ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Miguel Ángel"], "correcta": 2 },
-        { "pregunta": "¿Quién escribió Don Quijote de la Mancha?", "respuestas": ["Lope de Vega", "Miguel de Cervantes", "Federico García Lorca", "Gustavo Adolfo Bécquer"], "correcta": 1 },
-        { "pregunta": "¿Qué autor creó el personaje de Sherlock Holmes?", "respuestas": ["Arthur Conan Doyle", "Agatha Christie", "Edgar Allan Poe", "Jules Verne"], "correcta": 0 },
-        { "pregunta": "¿Qué poeta escribió 'Veinte poemas de amor y una canción desesperada'?", "respuestas": ["Pablo Neruda", "Octavio Paz", "Jorge Luis Borges", "César Vallejo"], "correcta": 0 },
-        { "pregunta": "¿Qué pintor es famoso por los relojes derretidos?", "respuestas": ["Salvador Dalí", "Joan Miró", "Diego Velázquez", "Claude Monet"], "correcta": 0 }
+        {
+            "pregunta": "¿Quién pintó la Mona Lisa?",
+            "respuestas": [
+                "Vincent van Gogh",
+                "Pablo Picasso",
+                "Leonardo da Vinci",
+                "Miguel Ángel"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Quién escribió Don Quijote de la Mancha?",
+            "respuestas": [
+                "Lope de Vega",
+                "Miguel de Cervantes",
+                "Federico García Lorca",
+                "Gustavo Adolfo Bécquer"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Qué autor creó el personaje de Sherlock Holmes?",
+            "respuestas": [
+                "Arthur Conan Doyle",
+                "Agatha Christie",
+                "Edgar Allan Poe",
+                "Jules Verne"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Qué poeta escribió 'Veinte poemas de amor y una canción desesperada'?",
+            "respuestas": [
+                "Pablo Neruda",
+                "Octavio Paz",
+                "Jorge Luis Borges",
+                "César Vallejo"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Qué pintor es famoso por los relojes derretidos?",
+            "respuestas": [
+                "Salvador Dalí",
+                "Joan Miró",
+                "Diego Velázquez",
+                "Claude Monet"
+            ],
+            "correcta": 0
+        }
     ],
     "deportes": [
-        { "pregunta": "¿Cuántos jugadores tiene un equipo de fútbol en el campo?", "respuestas": ["9", "10", "11", "12"], "correcta": 2 },
-        { "pregunta": "¿En qué deporte se usa un puck?", "respuestas": ["Baloncesto", "Hockey sobre hielo", "Béisbol", "Rugby"], "correcta": 1 },
-        { "pregunta": "¿Cuántos sets tiene que ganar un jugador para ganar un partido de tenis masculino de Grand Slam?", "respuestas": ["2", "3", "4", "5"], "correcta": 1 },
-        { "pregunta": "¿Qué país ganó el Mundial de fútbol de 2010?", "respuestas": ["Brasil", "Alemania", "España", "Italia"], "correcta": 2 },
-        { "pregunta": "¿Cómo se llama el torneo de tenis que se juega en césped en Londres?", "respuestas": ["Roland Garros", "US Open", "Wimbledon", "Open de Australia"], "correcta": 2 }
+        {
+            "pregunta": "¿Cuántos jugadores tiene un equipo de fútbol en el campo?",
+            "respuestas": [
+                "9",
+                "10",
+                "11",
+                "12"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿En qué deporte se usa un puck?",
+            "respuestas": [
+                "Baloncesto",
+                "Hockey sobre hielo",
+                "Béisbol",
+                "Rugby"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Cuántos sets tiene que ganar un jugador para ganar un partido de tenis masculino de Grand Slam?",
+            "respuestas": [
+                "2",
+                "3",
+                "4",
+                "5"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Qué país ganó el Mundial de fútbol de 2010?",
+            "respuestas": [
+                "Brasil",
+                "Alemania",
+                "España",
+                "Italia"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Cómo se llama el torneo de tenis que se juega en césped en Londres?",
+            "respuestas": [
+                "Roland Garros",
+                "US Open",
+                "Wimbledon",
+                "Open de Australia"
+            ],
+            "correcta": 2
+        }
+    ],
+    "videojuegos": [
+        {
+            "pregunta": "¿Quién es el protagonista de The Legend of Zelda?",
+            "respuestas": [
+                "Link",
+                "Zelda",
+                "Ganondorf",
+                "Epona"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿En qué juego se controla un plomero bigotudo que rescata princesas?",
+            "respuestas": [
+                "Sonic",
+                "Mario",
+                "Crash",
+                "Spyro"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Qué saga de videojuegos se desarrolla en el universo de Halo?",
+            "respuestas": [
+                "Gears of War",
+                "Mass Effect",
+                "Halo",
+                "Metroid"
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Cuál es el nombre de la nave espacial en la saga de videojuegos Mass Effect?",
+            "respuestas": [
+                "Normandy",
+                "Enterprise",
+                "Millennium Falcon",
+                "Serenity"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Qué videojuego de terror pone a prueba tu capacidad de supervivencia en una isla infestada de zombis?",
+            "respuestas": [
+                "Resident Evil",
+                "Silent Hill",
+                "The Last of Us",
+                "Dead Island"
+            ],
+            "correcta": 0
+        }
     ]
 }

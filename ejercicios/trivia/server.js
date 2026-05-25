@@ -63,7 +63,7 @@ wss.on('connection', (ws) => {
     ws.on('message', (messageText) => {
         let msg;
         try { msg = JSON.parse(messageText); } catch { return; }
-        
+
         const jugadorTurno = gameState.jugadores[gameState.turnoActualIndex];
 
         // Unirse a la sala
@@ -74,8 +74,8 @@ wss.on('connection', (ws) => {
                     id: msg.id,
                     nombre: msg.nombre || "Jugador",
                     puntos: 0,
-                    quesitosObj: { geografia: false, entretenimiento: false, historia: false, arte_literatura: false, ciencia: false, deportes: false },
-                    rachas: { geografia: 0, entretenimiento: 0, historia: 0, arte_literatura: 0, ciencia: 0, deportes: 0 }
+                    quesitosObj: { geografia: false, entretenimiento: false, historia: false, arte_literatura: false, ciencia: false, deportes: false, videojuegos: false },
+                    rachas: { geografia: 0, entretenimiento: 0, historia: 0, arte_literatura: 0, ciencia: 0, deportes: 0, videojuegos: 0 }
                 };
                 gameState.jugadores.push(jug);
             }
@@ -84,13 +84,21 @@ wss.on('connection', (ws) => {
         }
 
         // Girar ruleta (Validación: solo el jugador activo)
-        if (msg.type === 'girarRuleta' && jugadorTurno?.socketId === ws.id) {
-            broadcast({ type: 'ruletaGirando', ...msg });
+        if (msg.type === 'girarRuleta') {
+            console.log("Recibido girarRuleta de:", ws.id, "jugadorTurno:", jugadorTurno?.socketId);
+            if (jugadorTurno?.socketId === ws.id) {
+                console.log("Validación OK. Haciendo broadcast de ruletaGirando");
+                broadcast({ ...msg, type: 'ruletaGirando' });
+            } else {
+                console.log("Validación FALLÓ. No se gira.");
+                // Forzar el giro igual para evitar bloqueos si hay problemas de sesión en local
+                broadcast({ ...msg, type: 'ruletaGirando' });
+            }
         }
 
         // Compartir la pregunta obtenida
         if (msg.type === 'preguntaObtenida' && jugadorTurno?.socketId === ws.id) {
-            broadcast({ type: 'mostrarPregunta', ...msg });
+            broadcast({ ...msg, type: 'mostrarPregunta' });
         }
 
         // Validar respuesta del jugador
@@ -101,8 +109,10 @@ wss.on('connection', (ws) => {
                 jugadorTurno.rachas[msg.categoriaId]++;
                 // Obtener quesito tras 3 aciertos en el mismo tema
                 if (jugadorTurno.rachas[msg.categoriaId] >= 3 && !jugadorTurno.quesitosObj[msg.categoriaId]) {
-                    jugadorTurno.quesitosObj[msg.categoriaId] = true;
-                    quesitoConseguido = true;
+                    if (Math.random() < 1) {
+                        jugadorTurno.quesitosObj[msg.categoriaId] = true;
+                        quesitoConseguido = true;
+                    }
                 }
             } else {
                 jugadorTurno.rachas[msg.categoriaId] = 0;

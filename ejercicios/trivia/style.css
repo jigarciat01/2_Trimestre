@@ -4,27 +4,33 @@
 :root {
 	/* Tamaño por defecto de la ruleta */
 	--escala: 350px;
-	
+
 	/* Colores base y de fondo */
 	--bg-color: #0b0f19;
 	--text-primary: #f8fafc;
 	--text-secondary: #94a3b8;
-	
+
 	/* Efecto Glassmorphism (paneles translúcidos) */
 	--glass-bg: rgba(30, 41, 59, 0.7);
 	--glass-border: rgba(255, 255, 255, 0.1);
-	
+
 	/* Color de énfasis (azul principal y su hover) */
 	--accent-color: #3b82f6;
 	--accent-hover: #2563eb;
 
 	/* Colores de las 6 categorías (deben coincidir con script.js) */
-	--cat-geo: #3498db;          /* Geografía (Azul) */
-	--cat-ent: #e84393;          /* Entretenimiento (Rosa) */
-	--cat-hist: #f1c40f;         /* Historia (Amarillo) */
-	--cat-arte: #8e44ad;         /* Arte y Letras (Morado) */
-	--cat-cien: #2ecc71;         /* Ciencia (Verde) */
-	--cat-dep: #e67e22;          /* Deportes (Naranja) */
+	--cat-geo: #3498db;
+	/* Geografía (Azul) */
+	--cat-ent: #e84393;
+	/* Entretenimiento (Rosa) */
+	--cat-hist: #f1c40f;
+	/* Historia (Amarillo) */
+	--cat-arte: #8e44ad;
+	/* Arte y Letras (Morado) */
+	--cat-cien: #2ecc71;
+	/* Ciencia (Verde) */
+	--cat-dep: #e67e22;
+	/* Deportes (Naranja) */
 }
 
 /* ==========================================================
@@ -95,6 +101,7 @@ body {
 	0% {
 		transform: translate(0, 0) scale(1);
 	}
+
 	100% {
 		transform: translate(30px, 50px) scale(1.1);
 	}
@@ -191,12 +198,33 @@ h1 {
 }
 
 /* Asignación de variables de color a cada icono según su categoría */
-.quesito-icono.geografia { --cat-color: var(--cat-geo); }
-.quesito-icono.entretenimiento { --cat-color: var(--cat-ent); }
-.quesito-icono.historia { --cat-color: var(--cat-hist); }
-.quesito-icono.arte { --cat-color: var(--cat-arte); }
-.quesito-icono.ciencia { --cat-color: var(--cat-cien); }
-.quesito-icono.deportes { --cat-color: var(--cat-dep); }
+.quesito-icono.geografia {
+	--cat-color: var(--cat-geo);
+}
+
+.quesito-icono.entretenimiento {
+	--cat-color: var(--cat-ent);
+}
+
+.quesito-icono.historia {
+	--cat-color: var(--cat-hist);
+}
+
+.quesito-icono.arte {
+	--cat-color: var(--cat-arte);
+}
+
+.quesito-icono.ciencia {
+	--cat-color: var(--cat-cien);
+}
+
+.quesito-icono.deportes {
+	--cat-color: var(--cat-dep);
+}
+
+.quesito-icono.videojuegos {
+	--cat-color: var(--cat-vj);
+}
 
 /* Animación y sombreado cuando el jugador gana el quesito (clase .conseguido) */
 .quesito-icono.conseguido {
@@ -425,6 +453,7 @@ h1 {
 		opacity: 0;
 		transform: translateY(20px);
 	}
+
 	to {
 		opacity: 1;
 		transform: translateY(0);
@@ -713,6 +742,7 @@ footer {
 		flex-direction: column;
 		width: 100%;
 	}
+
 	.botones-header button {
 		width: 100%;
 	}

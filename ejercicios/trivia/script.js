@@ -10,7 +10,8 @@ const categorias = [
     { id: 'historia', nombre: 'Historia', color: '#f1c40f' },
     { id: 'arte_literatura', nombre: 'Arte y Letras', color: '#8e44ad' },
     { id: 'ciencia', nombre: 'Ciencia', color: '#2ecc71' },
-    { id: 'deportes', nombre: 'Deportes', color: '#e67e22' }
+    { id: 'deportes', nombre: 'Deportes', color: '#e67e22' },
+    { id: 'videojuegos', nombre: 'Videojuegos', color: '#32cd32' }
 ];
 
 // Selectores del DOM agrupados para máxima simplicidad
@@ -102,7 +103,7 @@ function dibujarRuleta() {
     let conic = [];
     categorias.forEach((cat, idx) => {
         conic.push(`${cat.color} ${idx * grados}deg ${(idx + 1) * grados}deg`);
-        
+
         const sep = document.createElement('div');
         sep.className = 'separador';
         sep.style.transform = `rotate(${idx * grados}deg)`;
@@ -182,7 +183,7 @@ function renderizarLobby(state) {
         const qCount = Object.values(j.quesitosObj).filter(Boolean).length;
         return `<li class="${esTurno ? 'turno-activo' : ''}">
             <span><strong>${j.nombre}</strong>${esLocal ? ' <span class="player-tag-you">Tú</span>' : ''}</span>
-            <span>${j.puntos} pts | 🧀 ${qCount}/6</span>
+            <span>${j.puntos} pts | 🧀 ${qCount}/7</span>
         </li>`;
     }).join('');
 }
@@ -198,7 +199,7 @@ const mostrarMensaje = (msg, tipo) => {
 function mostrarModalPregunta(datos) {
     $('tema-pregunta').innerText = categoriaActual.nombre;
     $('texto-pregunta').innerText = datos.pregunta;
-    
+
     const ops = $('opciones-respuestas');
     ops.innerHTML = "";
     datos.respuestas.forEach((resp, idx) => {
@@ -234,7 +235,7 @@ function validarRespuesta(idx) {
 }
 
 function renderizarRanking(tabla) {
-    const listHtml = tabla.map(j => `<li><strong>${j.nombre}</strong>: ${j.puntos} pts (${j.quesitos}/6)</li>`).join('');
+    const listHtml = tabla.map(j => `<li><strong>${j.nombre}</strong>: ${j.puntos} pts (${j.quesitos}/7)</li>`).join('');
     $('ranking-lista').innerHTML = `<ol>${listHtml}</ol>`;
 }
 

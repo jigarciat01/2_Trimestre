@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Trivial Full-Stack - Un juego de preguntas y respuestas dinámico y moderno.">
-	
+
 	<!-- Fuentes de Google Fonts para un diseño moderno (Outfit) -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-	
+
 	<!-- Hojas de estilos y lógica JS -->
 	<link rel="stylesheet" href="style.css">
 	<script src="script.js" defer></script>
-	
-	<title>Trivial Full-Stack: 6 Categorías</title>
+
+	<title>Trivial Full-Stack: 7 Categorías</title>
 </head>
+
 <body>
 	<!-- Orbes decorativos animados en segundo plano para el efecto visual de profundidad -->
 	<div class="bg-orb orb-1"></div>
@@ -26,31 +28,46 @@
 	<!-- Cabecera principal con diseño Glassmorphism -->
 	<header class="glass-panel main-header">
 		<h1>🏆 Trivial Full-Stack</h1>
-		
+
 		<!-- Indicador del turno actual en tiempo real -->
 		<div class="header-turno-container">
 			<div id="indicador-turno" class="turno-indicador">Esperando jugadores...</div>
 		</div>
-		
+
 		<!-- Panel del estado actual del jugador activo (puntos y quesitos ganados) -->
 		<div class="estado-juego">
 			<div class="puntos-container">
 				<h2>Puntos</h2>
 				<span id="puntos-display" class="puntos-valor">0</span>
 			</div>
-			
-			<!-- Indicador visual de los 6 quesitos de categorías -->
+
+			<!-- Indicador visual de los 7 quesitos de categorías -->
 			<div class="progreso-wrapper">
 				<div class="progreso-quesitos">
-					<div class="tema-progreso"><div id="q-geografia" class="quesito-icono geografia"></div><span>Geo</span></div>
-					<div class="tema-progreso"><div id="q-entretenimiento" class="quesito-icono entretenimiento"></div><span>Ent</span></div>
-					<div class="tema-progreso"><div id="q-historia" class="quesito-icono historia"></div><span>Hist</span></div>
-					<div class="tema-progreso"><div id="q-arte_literatura" class="quesito-icono arte"></div><span>Arte</span></div>
-					<div class="tema-progreso"><div id="q-ciencia" class="quesito-icono ciencia"></div><span>Cien</span></div>
-					<div class="tema-progreso"><div id="q-deportes" class="quesito-icono deportes"></div><span>Dep</span></div>
+					<div class="tema-progreso">
+						<div id="q-geografia" class="quesito-icono geografia"></div><span>Geo</span>
+					</div>
+					<div class="tema-progreso">
+						<div id="q-entretenimiento" class="quesito-icono entretenimiento"></div><span>Ent</span>
+					</div>
+					<div class="tema-progreso">
+						<div id="q-historia" class="quesito-icono historia"></div><span>Hist</span>
+					</div>
+					<div class="tema-progreso">
+						<div id="q-arte_literatura" class="quesito-icono arte"></div><span>Arte</span>
+					</div>
+					<div class="tema-progreso">
+						<div id="q-ciencia" class="quesito-icono ciencia"></div><span>Cien</span>
+					</div>
+					<div class="tema-progreso">
+						<div id="q-deportes" class="quesito-icono deportes"></div><span>Dep</span>
+					</div>
+					<div class="tema-progreso">
+						<div id="q-videojuegos" class="quesito-icono videojuegos"></div><span>Vj</span>
+					</div>
 				</div>
 			</div>
-			
+
 			<!-- Botones rápidos de control del lobby -->
 			<div class="botones-header">
 				<button id="btn-anadir-jugador" class="btn-primary">Añadir Jugador</button>
@@ -74,14 +91,16 @@
 				<!-- Contenedor dinámico donde JS inyecta las rebanadas y textos -->
 				<div id="opcionesContainer"></div>
 				<!-- Botón central para efectuar el giro -->
-				<div id="sortear" class="btn-sortear"><p>GIRAR</p></div>
+				<div id="sortear" class="btn-sortear">
+					<p>GIRAR</p>
+				</div>
 			</div>
 		</div>
 
 		<!-- Contenedor de notificaciones y feedback de las rondas (correcto/incorrecto) -->
 		<div id="feedback-container" class="oculto"></div>
 
-		<!-- Panel flotante que se muestra en caso de ganar los 6 quesitos -->
+		<!-- Panel flotante que se muestra en caso de ganar los 7 quesitos -->
 		<div id="mensaje-victoria" class="glass-panel oculto victoria-panel">
 			<h2>¡HAS GANADO!</h2>
 			<p>Has conseguido todos los quesitos.</p>
@@ -118,4 +137,5 @@
 		</div>
 	</footer>
 </body>
+
 </html>
