@@ -1,6 +1,4 @@
-// ==========================================================
-// ====== ESTADO DEL JUEGO Y CONFIGURACIÓN ==================
-// ==========================================================
+// ====== ESTADO Y CONFIGURACIÓN ======
 let misJugadoresLocales = [], miTurno = false, preguntaActualCorrecta = null;
 let textoRespuestaCorrecta = "", categoriaActual = null, girosAcumulados = 0, timerInterval;
 
@@ -14,113 +12,114 @@ const categorias = [
     { id: 'videojuegos', nombre: 'Videojuegos', color: '#32cd32' }
 ];
 
-// Selectores del DOM agrupados para máxima simplicidad
 const $ = id => document.getElementById(id);
 const DOM = {
-    opcionesContainer: $('opcionesContainer'), btnSortear: $('sortear'), cartelTexto: $('ganadorTexto'),
-    modalPregunta: $('modal-pregunta'), feedbackContainer: $('feedback-container'), btnAnadirJugador: $('btn-anadir-jugador'),
-    btnReiniciar: $('btn-reiniciar'), ruletaWrapper: $('ruleta-wrapper'), mensajeVictoria: $('mensaje-victoria'),
-    temporizadorUI: $('temporizador'), indicadorTurno: $('indicador-turno'), listaSala: $('lista-sala')
+    opciones: $('opcionesContainer'), btnSortear: $('sortear'), cartelTexto: $('ganadorTexto'),
+    modal: $('modal-pregunta'), feedback: $('feedback-container'), btnAnadir: $('btn-anadir-jugador'),
+    btnReiniciar: $('btn-reiniciar'), ruletaWrapper: $('ruleta-wrapper'), victoria: $('mensaje-victoria'),
+    timer: $('temporizador'), turno: $('indicador-turno'), listaSala: $('lista-sala')
 };
 
 let ws = null;
 
-// Inicialización de Eventos y Carga de Componentes
+// ====== INICIALIZACIÓN ======
 document.addEventListener('DOMContentLoaded', () => {
-    cargarJugadoresLocalesDeStorage();
+    cargarJugadoresDeStorage();
     dibujarRuleta();
     conectarWebSocket();
     DOM.btnSortear.onclick = girarRuleta;
-    DOM.btnAnadirJugador.onclick = agregarJugadorLocal;
-    DOM.btnReiniciar.onclick = reiniciarPartidaLocal;
-    DOM.opcionesContainer.ontransitionend = alTerminarGiro; // Fin de animación de ruleta
+    DOM.btnAnadir.onclick = agregarJugador;
+    DOM.btnReiniciar.onclick = reiniciarPartida;
+    DOM.opciones.ontransitionend = alTerminarGiro;
 });
 
-// Añadir un nuevo jugador a este cliente
-function agregarJugadorLocal() {
+function agregarJugador() {
     let nombre = "";
     while (!nombre.trim()) {
         const input = prompt('Introduce tu nombre:');
         if (input === null) return;
         nombre = input;
     }
-    const localId = 'local_' + Math.random().toString(36).substring(2, 9);
-    misJugadoresLocales.push({ id: localId, nombre: nombre.trim() });
-    guardarJugadoresLocalesEnStorage();
-    enviarMensaje('join', { id: localId, nombre: nombre.trim() });
+    const id = 'local_' + Math.random().toString(36).substring(2, 9);
+    misJugadoresLocales.push({ id, nombre: nombre.trim() });
+    localStorage.setItem('trivia_jugadores', JSON.stringify(misJugadoresLocales));
+    enviar('join', { id, nombre: nombre.trim() });
 }
 
-// ==========================================================
-// ====== LOGICA DE CONEXIÓN WEBSOCKET =======================
-// ==========================================================
+// ====== WEBSOCKET ======
 function conectarWebSocket() {
-    ws = new WebSocket(`${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}`);
+    ws = new WebSocket(`${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}`);
     ws.onopen = () => console.log("Conectado con el Servidor");
     ws.onmessage = e => manejarMensaje(JSON.parse(e.data));
-    ws.onclose = () => setTimeout(conectarWebSocket, 3000); // Reintento de conexión automática
+    ws.onclose = () => setTimeout(conectarWebSocket, 3000);
 }
 
-const enviarMensaje = (type, data = {}) => ws?.readyState === WebSocket.OPEN && ws.send(JSON.stringify({ type, ...data }));
+const enviar = (type, data = {}) => ws?.readyState === WebSocket.OPEN && ws.send(JSON.stringify({ type, ...data }));
 
-// Manejador centralizado de mensajes recibidos por WebSockets
 function manejarMensaje(msg) {
-    const { type, state, randomIdx, girosAcumulados: nuevosGiros, correcta, respuestas, nombre, jugadorId, timeout, quesitoConseguido, intentoQuesitoFallido, racha, categoriaId } = msg;
+    switch (msg.type) {
+        case 'askName':
+            if (misJugadoresLocales.length === 0) agregarJugador();
+            else misJugadoresLocales.forEach(j => enviar('join', j));
+            break;
 
-    if (type === 'askName') {
-        if (misJugadoresLocales.length === 0) agregarJugadorLocal();
-        else misJugadoresLocales.forEach(j => enviarMensaje('join', j));
-    } else if (type === 'gameState') {
-        renderizarLobby(state);
-    } else if (type === 'ruletaGirando') {
-        categoriaActual = categorias[randomIdx];
-        girosAcumulados = nuevosGiros;
-        DOM.btnSortear.style.pointerEvents = 'none';
-        DOM.cartelTexto.innerText = "¡Girando...";
-        DOM.feedbackContainer.className = 'oculto';
-        DOM.opcionesContainer.style.transform = `rotate(${girosAcumulados}deg)`;
-    } else if (type === 'mostrarPregunta') {
-        preguntaActualCorrecta = correcta;
-        textoRespuestaCorrecta = respuestas[correcta];
-        mostrarModalPregunta(msg);
-    } else if (type === 'resultadoRespuesta') {
-        clearInterval(timerInterval);
-        DOM.modalPregunta.close();
-        const catNombre = categorias.find(c => c.id === categoriaId)?.nombre || categoriaId;
-        if (correcta) {
-            if (quesitoConseguido) {
-                mostrarMensaje(`✅ ¡${nombre} acertó! (+10 pts)\n🎉 ¡CONSIGUIÓ EL QUESITO DE ${catNombre.toUpperCase()}!`, 'success');
-            } else if (intentoQuesitoFallido) {
-                mostrarMensaje(`✅ ¡${nombre} acertó! (+10 pts) (Racha de ${racha} en ${catNombre})\n⚠️ ¡Mala Suerte! No le tocó el quesito.`, 'warning');
+        case 'gameState':
+            renderizarLobby(msg.state);
+            break;
+
+        case 'ruletaGirando':
+            categoriaActual = categorias[msg.randomIdx];
+            girosAcumulados = msg.girosAcumulados;
+            DOM.btnSortear.style.pointerEvents = 'none';
+            DOM.cartelTexto.innerText = "¡Girando...";
+            DOM.feedback.className = 'oculto';
+            DOM.opciones.style.transform = `rotate(${girosAcumulados}deg)`;
+            break;
+
+        case 'mostrarPregunta':
+            preguntaActualCorrecta = msg.correcta;
+            textoRespuestaCorrecta = msg.respuestas[msg.correcta];
+            mostrarModalPregunta(msg);
+            break;
+
+        case 'resultadoRespuesta': {
+            clearInterval(timerInterval);
+            DOM.modal.close();
+            const catNombre = categorias.find(c => c.id === msg.categoriaId)?.nombre || msg.categoriaId;
+            if (msg.correcta) {
+                if (msg.quesitoConseguido) {
+                    mostrarFeedback(`✅ ¡${msg.nombre} acertó! (+10 pts)\n🎉 ¡CONSIGUIÓ EL QUESITO DE ${catNombre.toUpperCase()}!`, 'success');
+                } else if (msg.intentoQuesitoFallido) {
+                    mostrarFeedback(`✅ ¡${msg.nombre} acertó! (+10 pts) (Racha de ${msg.racha} en ${catNombre})\n⚠️ ¡Mala Suerte! No le tocó el quesito.`, 'warning');
+                } else {
+                    mostrarFeedback(`✅ ¡${msg.nombre} acertó! (+10 pts)`, 'success');
+                }
             } else {
-                mostrarMensaje(`✅ ¡${nombre} acertó! (+10 pts)`, 'success');
+                mostrarFeedback(`❌ A ${msg.nombre} ${msg.timeout ? 'se le agotó el tiempo' : 'falló'}.\nCorrecta: "${textoRespuestaCorrecta}".`, 'error');
             }
-        } else {
-            mostrarMensaje(`❌ A ${nombre} ${timeout ? 'se le agotó el tiempo' : 'falló'}.\nCorrecta: "${textoRespuestaCorrecta}".`, 'error');
+            break;
         }
     }
 }
 
-// ==========================================================
-// ====== DIBUJO Y LOGICA DE LA RULETA ======================
-// ==========================================================
+// ====== RULETA ======
 function dibujarRuleta() {
     const grados = 360 / categorias.length;
-    let conic = [];
-    categorias.forEach((cat, idx) => {
-        conic.push(`${cat.color} ${idx * grados}deg ${(idx + 1) * grados}deg`);
+    const conic = categorias.map((cat, i) => `${cat.color} ${i * grados}deg ${(i + 1) * grados}deg`);
+    DOM.opciones.style.background = `conic-gradient(${conic.join(', ')})`;
 
+    categorias.forEach((cat, i) => {
         const sep = document.createElement('div');
         sep.className = 'separador';
-        sep.style.transform = `rotate(${idx * grados}deg)`;
-        DOM.opcionesContainer.appendChild(sep);
+        sep.style.transform = `rotate(${i * grados}deg)`;
+        DOM.opciones.appendChild(sep);
 
         const txt = document.createElement('p');
         txt.className = 'nombre';
         txt.innerText = cat.nombre;
-        txt.style.transform = `rotate(${idx * grados + grados / 2}deg)`;
-        DOM.opcionesContainer.appendChild(txt);
+        txt.style.transform = `rotate(${i * grados + grados / 2}deg)`;
+        DOM.opciones.appendChild(txt);
     });
-    DOM.opcionesContainer.style.background = `conic-gradient(${conic.join(', ')})`;
 }
 
 function girarRuleta() {
@@ -130,90 +129,83 @@ function girarRuleta() {
     const dest = 360 - (idx * grados + grados / 2);
     let diff = dest - (girosAcumulados % 360);
     if (diff < 0) diff += 360;
-    enviarMensaje('girarRuleta', { randomIdx: idx, girosAcumulados: girosAcumulados + 1800 + diff });
+    enviar('girarRuleta', { randomIdx: idx, girosAcumulados: girosAcumulados + 1800 + diff });
 }
 
 function alTerminarGiro() {
     if (categoriaActual) DOM.cartelTexto.innerText = `¡${categoriaActual.nombre}!`;
-    if (miTurno) obtenerPreguntaDelServidor(categoriaActual.id);
+    if (miTurno) obtenerPregunta(categoriaActual.id);
 }
 
-// Obtener pregunta REST del servidor Express
-async function obtenerPreguntaDelServidor(tema) {
+async function obtenerPregunta(tema) {
     try {
         const res = await fetch(`/pregunta/${tema}`);
         if (!res.ok) throw new Error();
-        enviarMensaje('preguntaObtenida', await res.json());
+        enviar('preguntaObtenida', await res.json());
     } catch {
         DOM.cartelTexto.innerText = "Error de conexión";
     }
 }
 
-// ==========================================================
-// ====== RENDERIZADO DE COMPONENTES DE INTERFAZ ============
-// ==========================================================
+// ====== INTERFAZ ======
 function renderizarLobby(state) {
     const act = state.jugadorTurnoActual;
     if (!act) {
-        DOM.indicadorTurno.innerText = "Esperando jugadores...";
-        DOM.indicadorTurno.style.color = "#fbbf24";
+        DOM.turno.innerText = "Esperando jugadores...";
+        DOM.turno.style.color = "#fbbf24";
         DOM.btnSortear.style.pointerEvents = 'none';
         return;
     }
 
     miTurno = misJugadoresLocales.some(j => j.id === act.id);
-    DOM.indicadorTurno.innerText = miTurno ? `¡TURNO DE ${act.nombre.toUpperCase()}!` : `Turno de: ${act.nombre}`;
-    DOM.indicadorTurno.style.color = miTurno ? "#4ade80" : "#fbbf24";
+    DOM.turno.innerText = miTurno ? `¡TURNO DE ${act.nombre.toUpperCase()}!` : `Turno de: ${act.nombre}`;
+    DOM.turno.style.color = miTurno ? "#4ade80" : "#fbbf24";
     DOM.btnSortear.style.pointerEvents = miTurno ? 'auto' : 'none';
     DOM.cartelTexto.innerText = miTurno ? '¡Click en "GIRAR"!' : "Esperando...";
-
     $('puntos-display').innerText = act.puntos;
 
-    // Resetear e iluminar quesitos
+    // Quesitos del jugador activo
     document.querySelectorAll('.quesito-icono').forEach(el => el.classList.remove('conseguido'));
     Object.entries(act.quesitosObj).forEach(([tema, ok]) => ok && $(`q-${tema}`)?.classList.add('conseguido'));
 
-    // Estado de Victoria
+    // Victoria
     const gano = Object.values(act.quesitosObj).every(Boolean);
     DOM.ruletaWrapper.style.display = gano ? 'none' : 'flex';
-    DOM.mensajeVictoria.classList.toggle('oculto', !gano);
+    DOM.victoria.classList.toggle('oculto', !gano);
     if (gano) {
-        DOM.mensajeVictoria.innerHTML = `<h2>¡${act.nombre.toUpperCase()} HA GANADO!</h2><p>Consiguió todos los quesitos.</p>`;
+        DOM.victoria.innerHTML = `
+            <h2>¡${act.nombre.toUpperCase()} HA GANADO!</h2>
+            <p>Consiguió todos los quesitos.</p>
+            ${miTurno ? '<button id="btn-guardar-ranking" class="btn-primary" style="margin-top:15px;">Guardar en Ranking Global</button>' : ''}
+        `;
+        if (miTurno) $('btn-guardar-ranking')?.addEventListener('click', () => guardarRanking(act));
     }
 
-    // Listado de la sala de espera actuando como ranking
-    const jugadoresOrdenados = [...state.jugadores].sort((a, b) => b.puntos - a.puntos);
-    DOM.listaSala.innerHTML = jugadoresOrdenados.map((j) => {
-        // Necesitamos el índice original para saber si es su turno
-        const originalIdx = state.jugadores.findIndex(orig => orig.id === j.id);
-        const esTurno = originalIdx === state.turnoActualIndex;
+    // Lista de jugadores ordenada por puntos
+    const ordenados = [...state.jugadores].sort((a, b) => b.puntos - a.puntos);
+    DOM.listaSala.innerHTML = ordenados.map(j => {
+        const esTurno = state.jugadores.indexOf(j) === state.turnoActualIndex;
         const esLocal = misJugadoresLocales.some(l => l.id === j.id);
-        const qCount = Object.values(j.quesitosObj).filter(Boolean).length;
-        const miniQuesitosHTML = categorias.map(cat => {
-            const conseguido = j.quesitosObj[cat.id] ? 'conseguido' : '';
-            return `<div class="quesito-mini ${cat.id} ${conseguido}" title="${cat.nombre}"></div>`;
-        }).join('');
+        const minis = categorias.map(cat =>
+            `<div class="quesito-mini ${cat.id} ${j.quesitosObj[cat.id] ? 'conseguido' : ''}" title="${cat.nombre}"></div>`
+        ).join('');
 
         return `<li class="${esTurno ? 'turno-activo' : ''}">
             <div class="jugador-info-fila">
                 <span><strong>${j.nombre}</strong>${esLocal ? ' <span class="player-tag-you">Tú</span>' : ''}</span>
                 <span>${j.puntos} pts</span>
             </div>
-            <div class="quesitos-mini-container">
-                ${miniQuesitosHTML}
-            </div>
+            <div class="quesitos-mini-container">${minis}</div>
         </li>`;
     }).join('');
 }
 
-const mostrarMensaje = (msg, tipo) => {
-    DOM.feedbackContainer.innerText = msg;
-    DOM.feedbackContainer.className = tipo;
+const mostrarFeedback = (msg, tipo) => {
+    DOM.feedback.innerText = msg;
+    DOM.feedback.className = tipo;
 };
 
-// ==========================================================
-// ====== DIALOG DE PREGUNTAS Y TEMPORIZADOR ================
-// ==========================================================
+// ====== MODAL DE PREGUNTAS ======
 function mostrarModalPregunta(datos) {
     $('tema-pregunta').innerText = categoriaActual.nombre;
     $('texto-pregunta').innerText = datos.pregunta;
@@ -224,20 +216,20 @@ function mostrarModalPregunta(datos) {
         const btn = document.createElement('button');
         btn.innerText = resp;
         if (miTurno) btn.onclick = () => validarRespuesta(idx);
-        else btn.style.cssText = "opacity: 0.7; cursor: not-allowed;";
+        else btn.style.cssText = "opacity:0.7;cursor:not-allowed;";
         ops.appendChild(btn);
     });
 
-    DOM.modalPregunta.showModal();
+    DOM.modal.showModal();
 
     let segs = 20;
-    DOM.temporizadorUI.innerText = segs;
+    DOM.timer.innerText = segs;
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
-        DOM.temporizadorUI.innerText = --segs;
+        DOM.timer.innerText = --segs;
         if (segs <= 0) {
             clearInterval(timerInterval);
-            if (miTurno) validarRespuesta(-1); // Responde timeout automáticamente
+            if (miTurno) validarRespuesta(-1);
         }
     }, 1000);
 }
@@ -245,30 +237,48 @@ function mostrarModalPregunta(datos) {
 function validarRespuesta(idx) {
     if (!miTurno) return;
     clearInterval(timerInterval);
-    enviarMensaje('respuestaValidada', {
+    enviar('respuestaValidada', {
         correcta: idx === preguntaActualCorrecta,
         categoriaId: categoriaActual.id,
         timeout: idx === -1
     });
 }
 
+// ====== ALMACENAMIENTO Y REINICIO ======
+function cargarJugadoresDeStorage() {
+    try { misJugadoresLocales = JSON.parse(localStorage.getItem('trivia_jugadores')) || []; }
+    catch { misJugadoresLocales = []; }
+}
 
-// ==========================================================
-// ====== ALMACENAMIENTO Y REINICIO =========================
-// ==========================================================
-function cargarJugadoresLocalesDeStorage() {
-    try {
-        misJugadoresLocales = JSON.parse(localStorage.getItem('trivia_jugadores')) || [];
-    } catch {
-        misJugadoresLocales = [];
+function reiniciarPartida() {
+    if (confirm('¿Reiniciar juego y borrar jugadores locales?')) {
+        localStorage.removeItem('trivia_jugadores');
+        location.reload();
     }
 }
 
-const guardarJugadoresLocalesEnStorage = () => localStorage.setItem('trivia_jugadores', JSON.stringify(misJugadoresLocales));
+async function guardarRanking(jugador) {
+    try {
+        const res = await fetch('/puntuacion', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nombre: jugador.nombre,
+                puntos: jugador.puntos,
+                quesitos: Object.keys(jugador.quesitosObj).filter(k => jugador.quesitosObj[k])
+            })
+        });
+        if (!res.ok) throw new Error();
+        const data = await res.json();
 
-function reiniciarPartidaLocal() {
-    if (confirm('¿Reiniciar juego y borrar jugadores locales?')) {
-        localStorage.removeItem('trivia_jugadores');
-        window.location.reload();
+        const btn = $('btn-guardar-ranking');
+        if (btn) {
+            btn.innerText = "¡Puntuación Guardada!";
+            btn.disabled = true;
+            btn.style.cssText = "opacity:0.5;cursor:not-allowed;";
+        }
+        mostrarFeedback(data.mensaje + ". ¡Felicidades!", 'success');
+    } catch {
+        alert("No se pudo conectar con el servidor para guardar el ranking.");
     }
 }
