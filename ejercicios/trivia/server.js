@@ -21,8 +21,10 @@ app.get('/pregunta/:categoria', (req, res) => {
 
 // --- Endpoint REST: guardar puntuación en ranking ---
 let rankingGlobal = [];
+// Responde a peticiones POST (cuando un jugador gana y guarda su puntuación)
 app.post('/puntuacion', (req, res) => {
     rankingGlobal.push(req.body);
+    // Ordena el ranking de mayor a menor puntuación automáticamente
     rankingGlobal.sort((a, b) => b.puntos - a.puntos);
     res.json({ mensaje: "Ranking actualizado", tabla: rankingGlobal });
 });
@@ -55,12 +57,14 @@ wss.on('connection', (ws) => {
 
         switch (msg.type) {
             case 'join': {
+                // Se busca si el jugador ya existe (por si se ha desconectado y reconectado)
                 let jug = gameState.jugadores.find(j => j.id === msg.id);
                 if (!jug) {
+
                     jug = new Jugador(msg.id, msg.nombre || "Jugador");
                     gameState.jugadores.push(jug);
                 }
-                jug.socketId = ws.id;
+                jug.socketId = ws.id; // Enlazamos su conexión actual
                 broadcast({ type: 'gameState', state: getPublicState() });
                 break;
             }
@@ -76,14 +80,17 @@ wss.on('connection', (ws) => {
                 if (!esSuTurno) break;
 
                 let resultado = { quesitoConseguido: false, intentoQuesitoFallido: false };
+
                 if (msg.correcta) {
+                    // Suma puntos y maneja la probabilidad de ganar un quesito
                     resultado = jugadorTurno.procesarAcierto(msg.categoriaId);
                 } else {
                     jugadorTurno.procesarFallo(msg.categoriaId);
-                    // Avanzar turno solo si falla
+                    // Avanzar turno al siguiente jugador solo si falla la pregunta
                     gameState.turnoActualIndex = (gameState.turnoActualIndex + 1) % gameState.jugadores.length;
                 }
 
+                // Comunicamos a todos el resultado (acierto/fallo, racha, etc)
                 broadcast({
                     type: 'resultadoRespuesta',
                     nombre: jugadorTurno.nombre,
@@ -94,6 +101,7 @@ wss.on('connection', (ws) => {
                     racha: jugadorTurno.rachas[msg.categoriaId],
                     categoriaId: msg.categoriaId
                 });
+                // Actualizamos marcadores y turnos
                 broadcast({ type: 'gameState', state: getPublicState() });
                 break;
         }

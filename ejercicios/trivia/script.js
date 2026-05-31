@@ -47,18 +47,23 @@ function agregarJugador() {
 }
 
 // ====== WEBSOCKET ======
+// Establece la conexión bidireccional con el servidor para el modo multijugador
 function conectarWebSocket() {
     ws = new WebSocket(`${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}`);
     ws.onopen = () => console.log("Conectado con el Servidor");
+    // Cada vez que el servidor nos manda un mensaje, lo procesamos aquí
     ws.onmessage = e => manejarMensaje(JSON.parse(e.data));
     ws.onclose = () => setTimeout(conectarWebSocket, 3000);
 }
 
+
 const enviar = (type, data = {}) => ws?.readyState === WebSocket.OPEN && ws.send(JSON.stringify({ type, ...data }));
 
+// Esta función es el "cerebro" del cliente, reacciona a lo que manda el servidor
 function manejarMensaje(msg) {
     switch (msg.type) {
         case 'askName':
+            // El servidor nos pide presentarnos al conectarnos
             if (misJugadoresLocales.length === 0) agregarJugador();
             else misJugadoresLocales.forEach(j => enviar('join', j));
             break;
@@ -123,24 +128,33 @@ function dibujarRuleta() {
 }
 
 function girarRuleta() {
-    if (!ws || !miTurno) return;
+    if (!ws || !miTurno) return; // Solo puedes girar si estás conectado y es tu turno
+
+    // Elegimos una categoría al azar matemáticamente
     const idx = Math.floor(Math.random() * categorias.length);
     const grados = 360 / categorias.length;
+
+    // Calculamos dónde tiene que parar visualmente la ruleta para señalar la categoría ganadora
     const dest = 360 - (idx * grados + grados / 2);
     let diff = dest - (girosAcumulados % 360);
     if (diff < 0) diff += 360;
+
+    // Avisamos al servidor para que todos los jugadores vean la ruleta girar
     enviar('girarRuleta', { randomIdx: idx, girosAcumulados: girosAcumulados + 1800 + diff });
 }
 
+// Se ejecuta automáticamente gracias a 'ontransitionend' cuando la animación CSS termina
 function alTerminarGiro() {
     if (categoriaActual) DOM.cartelTexto.innerText = `¡${categoriaActual.nombre}!`;
     if (miTurno) obtenerPregunta(categoriaActual.id);
 }
 
+// Hace una petición HTTP (API REST) al servidor para pedir una pregunta de un tema específico
 async function obtenerPregunta(tema) {
     try {
         const res = await fetch(`/pregunta/${tema}`);
         if (!res.ok) throw new Error();
+        // Una vez tengo la pregunta, aviso por WebSocket para que todos la vean en sus pantallas
         enviar('preguntaObtenida', await res.json());
     } catch {
         DOM.cartelTexto.innerText = "Error de conexión";
@@ -206,22 +220,26 @@ const mostrarFeedback = (msg, tipo) => {
 };
 
 // ====== MODAL DE PREGUNTAS ======
+// Abre el cuadro de diálogo (modal) en la pantalla de todos y arranca el cronómetro
 function mostrarModalPregunta(datos) {
     $('tema-pregunta').innerText = categoriaActual.nombre;
     $('texto-pregunta').innerText = datos.pregunta;
 
     const ops = $('opciones-respuestas');
-    ops.innerHTML = "";
+    ops.innerHTML = ""; // Limpiamos opciones anteriores
+
     datos.respuestas.forEach((resp, idx) => {
         const btn = document.createElement('button');
         btn.innerText = resp;
+
         if (miTurno) btn.onclick = () => validarRespuesta(idx);
-        else btn.style.cssText = "opacity:0.7;cursor:not-allowed;";
+        else btn.style.cssText = "opacity:0.7;cursor:not-allowed;"; // Los demás lo ven desactivado
         ops.appendChild(btn);
     });
 
     DOM.modal.showModal();
 
+    // Cuenta atrás de 20 segundos
     let segs = 20;
     DOM.timer.innerText = segs;
     clearInterval(timerInterval);
@@ -229,11 +247,13 @@ function mostrarModalPregunta(datos) {
         DOM.timer.innerText = --segs;
         if (segs <= 0) {
             clearInterval(timerInterval);
+            // Si se acaba el tiempo y es mi turno, envío -1 como fallo por timeout
             if (miTurno) validarRespuesta(-1);
         }
     }, 1000);
 }
 
+// Envía al servidor la información de si acerté o fallé (y si fue por tiempo)
 function validarRespuesta(idx) {
     if (!miTurno) return;
     clearInterval(timerInterval);
